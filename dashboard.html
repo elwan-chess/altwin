@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الطالب - منصة التوأم</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
+  body { background: #f1f5f9; min-height: 100vh; padding-bottom: 30px; }
+  
+  header {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    color: #fff; padding: 20px;
+    border-radius: 0 0 25px 25px;
+    box-shadow: 0 10px 25px rgba(30,58,138,0.3);
+    position: sticky; top: 0; z-index: 100;
+  }
+  
+  .header-top {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 12px;
+    gap: 8px;
+  }
+  
+  .logo-small { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: bold; }
+  .logo-small span:first-child { font-size: 26px; }
+  
+  .header-buttons {
+    display: flex; gap: 8px; align-items: center;
+  }
+  
+  .icon-btn {
+    background: rgba(255,255,255,0.2); border: none;
+    color: #fff; padding: 8px 12px; border-radius: 10px;
+    font-size: 14px; cursor: pointer; font-family: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .icon-btn.support-btn-header {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    display: none;
+  }
+  .icon-btn.support-btn-header.show { display: inline-flex; }
+  
+  .welcome { font-size: 14px; opacity: 0.95; }
+  
+  .student-info {
+    background: rgba(255,255,255,0.15);
+    padding: 10px 12px; border-radius: 12px;
+    margin-top: 10px; font-size: 12px;
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+  
+  .tabs { display: flex; gap: 8px; padding: 18px 15px 10px; overflow-x: auto; }
+  .tab {
+    padding: 10px 20px; background: #fff; border: none;
+    border-radius: 25px; font-size: 13px; font-weight: bold;
+    color: #64748b; cursor: pointer; white-space: nowrap;
+    transition: 0.3s; font-family: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .tab.active {
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(59,130,246,0.4);
+  }
+  
+  .content { padding: 10px 15px; }
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.4s; }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .card {
+    background: #fff; border-radius: 16px; padding: 16px;
+    margin-bottom: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    transition: 0.3s; cursor: pointer;
+    border-right: 4px solid #3b82f6;
+    position: relative;
+  }
+  .card:active { transform: scale(0.98); }
+  
+  .card-title { font-size: 15px; font-weight: bold; color: #1e293b; margin-bottom: 6px; }
+  .card-desc { font-size: 13px; color: #64748b; line-height: 1.6; }
+  .card-meta { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  
+  .badge {
+    display: inline-block; padding: 4px 10px; border-radius: 8px;
+    font-size: 11px; font-weight: bold;
+  }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-orange { background: #fed7aa; color: #9a3412; }
+  .badge-purple { background: #e9d5ff; color: #6b21a8; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  
+  .done-mark {
+    position: absolute; top: 12px; left: 12px;
+    background: #22c55e; color: #fff;
+    width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+  }
+  
+  .overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9); z-index: 1000;
+    padding: 15px; overflow-y: auto;
+  }
+  .overlay.active { display: block; }
+  
+  .overlay-box {
+    background: #fff; border-radius: 16px;
+    max-width: 700px; margin: 30px auto; padding: 18px;
+    position: relative;
+  }
+  
+  .close-btn {
+    position: absolute; top: 12px; left: 12px;
+    background: #ef4444; color: #fff;
+    border: none; width: 32px; height: 32px;
+    border-radius: 50%; font-size: 16px; cursor: pointer;
+    font-family: inherit;
+  }
+  
+  .video-wrapper {
+    position: relative; padding-bottom: 56.25%;
+    height: 0; margin: 15px 0; border-radius: 12px;
+    overflow: hidden; background: #000;
+  }
+  .video-wrapper video, .video-wrapper iframe {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  
+  .complete-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: bold; cursor: pointer;
+    margin-top: 15px; font-family: inherit;
+  }
+  .complete-btn.done { background: #cbd5e1; cursor: not-allowed; }
+  
+  .exam-header {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff; padding: 15px; border-radius: 14px;
+    margin-bottom: 15px; text-align: center;
+  }
+  .exam-header h2 { font-size: 18px; margin-bottom: 5px; }
+  .exam-header p { font-size: 13px; opacity: 0.9; }
+  
+  .exam-image {
+    width: 100%; border-radius: 12px;
+    margin-bottom: 15px; border: 2px solid #e2e8f0;
+  }
+  
+  .question-box {
+    background: #fff; border-radius: 14px;
+    padding: 15px; margin-bottom: 14px;
+    border-right: 4px solid #3b82f6;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+  }
+  
+  .q-number {
+    display: inline-block;
+    background: #dbeafe; color: #1e40af;
+    padding: 4px 10px; border-radius: 8px;
+    font-size: 12px; font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .q-text {
+    font-size: 15px; font-weight: bold;
+    color: #1e293b; margin-bottom: 12px;
+    line-height: 1.7;
+  }
+  
+  .q-answer-input {
+    width: 100%; padding: 12px;
+    border: 2px solid #e2e8f0; border-radius: 10px;
+    font-size: 14px; font-family: inherit;
+    min-height: 100px; resize: vertical;
+    background: #f8fafc; color: #1e293b;
+  }
+  .q-answer-input:focus {
+    outline: none; border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+  }
+  
+  .result-answer {
+    margin-top: 12px; padding: 12px;
+    border-radius: 10px;
+    font-size: 13px; line-height: 1.7;
+  }
+  .result-answer.correct {
+    background: #dcfce7; border-right: 4px solid #22c55e;
+  }
+  .result-answer.partial {
+    background: #fef3c7; border-right: 4px solid #f59e0b;
+  }
+  .result-answer.wrong {
+    background: #fee2e2; border-right: 4px solid #ef4444;
+  }
+  
+  .result-label {
+    font-weight: bold; font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  .model-answer {
+    margin-top: 10px; padding: 10px;
+    background: #eff6ff; border-radius: 8px;
+    font-size: 13px; line-height: 1.7;
+    color: #1e40af;
+  }
+  
+  .score-box {
+    text-align: center; padding: 25px;
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    margin-bottom: 15px;
+  }
+  
+  .score-big {
+    font-size: 52px; font-weight: bold;
+    margin: 12px 0;
+  }
+  
+  .submit-btn {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: bold; cursor: pointer;
+    font-family: inherit; margin-top: 10px;
+  }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  
+  .back-btn {
+    width: 100%; padding: 12px;
+    background: #e2e8f0; color: #475569;
+    border: none; border-radius: 12px;
+    font-size: 14px; font-weight: bold; cursor: pointer;
+    font-family: inherit; margin-top: 10px;
+  }
+  
+  .empty {
+    text-align: center; padding: 45px 20px;
+    color: #94a3b8; font-size: 15px;
+  }
+  
+  .loading {
+    text-align: center; padding: 30px;
+    color: #94a3b8; font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <div class="logo-small">
+      <span>👥</span>
+      <span>التوأم</span>
+    </div>
+    <div class="header-buttons">
+      <a href="#" class="icon-btn support-btn-header" id="headerSupportBtn" target="_blank">💬</a>
+      <button class="icon-btn" onclick="logout()">خروج</button>
+    </div>
+  </div>
+  <div class="welcome">أهلاً <b id="welcomeName">بيك</b> 👋</div>
+  <div class="student-info">
+    <span>🎓 <b id="stype">---</b></span>
+    <span>📱 <b id="sid">---</b></span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('lessons', this)">📚 الحصص</button>
+  <button class="tab" onclick="switchTab('exams', this)">📝 الامتحانات</button>
+  <button class="tab" onclick="switchTab('results', this)">📊 نتائجي</button>
+</div>
+
+<div class="content">
+  <div id="lessons" class="section active">
+    <div id="lessonsList"><div class="loading">جاري التحميل...</div></div>
+  </div>
+  
+  <div id="exams" class="section">
+    <div id="examsList"><div class="loading">جاري التحميل...</div></div>
+  </div>
+  
+  <div id="results" class="section">
+    <div id="resultsList"></div>
+  </div>
+</div>
+
+<div class="overlay" id="playerOverlay">
+  <div class="overlay-box">
+    <button class="close-btn" onclick="closePlayer()">✕</button>
+    <h2 id="lessonTitle" style="color:#1e3a8a; font-size:17px; margin-bottom:8px;"></h2>
+    <div class="video-wrapper">
+      <video id="videoPlayer" controls playsinline></video>
+    </div>
+    <p id="lessonDesc" style="color:#64748b; font-size:13px; line-height:1.7;"></p>
+    <button class="complete-btn" id="completeBtn" onclick="markComplete()">✅ خلصت الدرس</button>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyACH2wbuP9VmpfmZIXj5He8c4FWzYLNqk4",
+    authDomain: "altwin-ea6c9.firebaseapp.com",
+    projectId: "altwin-ea6c9",
+    storageBucket: "altwin-ea6c9.firebasestorage.app",
+    messagingSenderId: "728148068456",
+    appId: "1:728148068456:web:edc9628e10b27d8eef53dd"
+  };
+  
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  
+  const studentId = localStorage.getItem('studentId');
+  const studentName = localStorage.getItem('studentName') || 'طالب';
+  const grade = localStorage.getItem('grade');
+  const parentPhone = localStorage.getItem('parentPhone');
+  
+  if (!studentId) {
+    window.location.href = 'index.html';
+  }
+  
+  document.getElementById('sid').textContent = studentId;
+  document.getElementById('welcomeName').textContent = studentName;
+  
+  const gradeMap = {
+    sec2: 'تانية بكالوريا',
+    sec3: 'تالتة ثانوي'
+  };
+  document.getElementById('stype').textContent = gradeMap[grade] || '---';
+  
+  let completedLessons = JSON.parse(localStorage.getItem('completed_' + studentId) || '[]');
+  let examResults = JSON.parse(localStorage.getItem('exams_' + studentId) || '{}');
+  
+  let allLessons = [];
+  let allExams = [];
+  
+  // ============ تحميل رقم الدعم ============
+  async function loadSupportPhone() {
+    try {
+      const snap = await getDoc(doc(db, 'settings', 'support'));
+      if (snap.exists() && snap.data().whatsapp) {
+        const phone = snap.data().whatsapp;
+        const btn = document.getElementById('headerSupportBtn');
+        btn.href = `https://wa.me/${phone}?text=${encodeURIComponent('مرحباً، عندي مشكلة في منصة التوأم')}`;
+        btn.classList.add('show');
+      }
+    } catch (err) {
+      console.log('لا يوجد رقم دعم');
+    }
+  }
+  
+  loadSupportPhone();
+  
+  // ============ التابات ============
+  window.switchTab = function(tabId, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+    
+    if (tabId === 'results') renderResults();
+  };
+  
+  // ============ الحصص ============
+  async function loadLessons() {
+    const list = document.getElementById('lessonsList');
+    try {
+      const snap = await getDocs(collection(db, 'lessons'));
+      allLessons = [];
+      snap.forEach(d => {
+        const l = d.data();
+        l.id = d.id;
+        if (l.grade === 'all' || l.grade === grade) {
+          allLessons.push(l);
+        }
+      });
+      
+      if (allLessons.length === 0) {
+        list.innerHTML = '<div class="empty">لا توجد حصص متاحة لمرحلتك حالياً 📭</div>';
+        return;
+      }
+      
+      let html = '';
+      allLessons.forEach(l => {
+        const isDone = completedLessons.includes(l.id);
+        html += `
+          <div class="card" onclick="openLesson('${l.id}')">
+            ${isDone ? '<div class="done-mark">✓</div>' : ''}
+            <div class="card-title">${l.title}</div>
+            <div class="card-desc">${l.desc || ''}</div>
+            <div class="card-meta">
+              <span class="badge badge-blue">⏱️ ${l.duration}</span>
+              ${isDone ? '<span class="badge badge-green">✓ مكتمل</span>' : '<span class="badge badge-orange">جديد</span>'}
+            </div>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
+    } catch (err) {
+      list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>';
+    }
+  }
+  
+  let currentLessonId = null;
+  
+  window.openLesson = function(id) {
+    const lesson = allLessons.find(l => l.id === id);
+    if (!lesson) return;
+    currentLessonId = id;
+    
+    document.getElementById('lessonTitle').textContent = lesson.title;
+    document.getElementById('lessonDesc').textContent = lesson.desc || '';
+    
+    const video = document.getElementById('videoPlayer');
+    video.src = lesson.videoUrl;
+    
+    const btn = document.getElementById('completeBtn');
+    if (completedLessons.includes(id)) {
+      btn.textContent = '✅ تم إكمال الدرس';
+      btn.classList.add('done');
+    } else {
+      btn.textContent = '✅ خلصت الدرس';
+      btn.classList.remove('done');
+    }
+    
+    document.getElementById('playerOverlay').classList.add('active');
+  };
+  
+  window.closePlayer = function() {
+    document.getElementById('playerOverlay').classList.remove('active');
+    const video = document.getElementById('videoPlayer');
+    video.pause();
+    video.src = '';
+  };
+  
+  window.markComplete = function() {
+    if (!currentLessonId || completedLessons.includes(currentLessonId)) return;
+    completedLessons.push(currentLessonId);
+    localStorage.setItem('completed_' + studentId, JSON.stringify(completedLessons));
+    document.getElementById('completeBtn').textContent = '✅ تم إكمال الدرس';
+    document.getElementById('completeBtn').classList.add('done');
+    loadLessons();
+  };
+  
+  // ============ الامتحانات ============
+  async function loadExams() {
+    const list = document.getElementById('examsList');
+    try {
+      const snap = await getDocs(collection(db, 'exams'));
+      allExams = [];
+      snap.forEach(d => {
+        const e = d.data();
+        e.id = d.id;
+        if (e.grade === 'all' || e.grade === grade) {
+          allExams.push(e);
+        }
+      });
+      
+      if (allExams.length === 0) {
+        list.innerHTML = '<div class="empty">لا توجد امتحانات متاحة لمرحلتك حالياً 📭</div>';
+        return;
+      }
+      
+      let html = '';
+      allExams.forEach(e => {
+        const res = examResults[e.id];
+        const qCount = e.questions ? e.questions.length : 0;
+        const total = e.totalPoints || 0;
+        html += `
+          <div class="card" onclick="openExam('${e.id}')" style="border-right-color:#a855f7;">
+            <div class="card-title">${e.title}</div>
+            <div class="card-meta">
+              <span class="badge badge-purple">${qCount} سؤال</span>
+              <span class="badge badge-blue">${total} درجة</span>
+              ${res ? `<span class="badge badge-green">نتيجتك: ${res.score}/${res.total}</span>` : '<span class="badge badge-orange">لم يُحل</span>'}
+            </div>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
+    } catch (err) {
+      list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>';
+    }
+  }
+  
+  let currentExam = null;
+  
+  window.openExam = function(id) {
+    const exam = allExams.find(e => e.id === id);
+    if (!exam) return;
+    currentExam = exam;
+    
+    let html = `
+      <div class="exam-header">
+        <h2>${exam.title}</h2>
+        <p>${exam.questions.length} سؤال • ${exam.totalPoints} درجة • ${exam.duration || ''}</p>
+      </div>
+    `;
+    
+    if (exam.imageUrl) {
+      if (exam.imageType === 'pdf') {
+        html += `<iframe src="${exam.imageUrl}" style="width:100%; height:500px; border-radius:12px; border:2px solid #e2e8f0; margin-bottom:15px;"></iframe>`;
+      } else {
+        html += `<img src="${exam.imageUrl}" class="exam-image">`;
+      }
+    }
+    
+    html += '<p style="color:#7c3aed; font-weight:bold; margin-bottom:12px; font-size:14px;">✍️ اكتب إجابتك لكل سؤال:</p>';
+    
+    exam.questions.forEach((q, i) => {
+      html += `
+        <div class="question-box" id="qbox${i}">
+          <div class="q-number">سؤال ${i + 1} • ${q.points} درجة</div>
+          <div class="q-text">${q.text}</div>
+          <textarea class="q-answer-input" id="ans${i}" placeholder="اكتب إجابتك هنا..."></textarea>
+        </div>
+      `;
+    });
+    
+    html += `<button class="submit-btn" id="submitExamBtn" onclick="submitExam()">📤 تسليم الامتحان</button>`;
+    html += `<button class="back-btn" onclick="loadExams()">رجوع</button>`;
+    
+    document.getElementById('examsList').innerHTML = html;
+    window.scrollTo(0, 0);
+  };
+  
+  function normalizeText(text) {
+    return text
+      .replace(/[أإآا]/g, 'ا')
+      .replace(/ة/g, 'ه')
+      .replace(/ى/g, 'ي')
+      .replace(/[ًٌٍَُِّْ]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+  
+  function checkAnswer(studentAnswer, keywords) {
+    if (!studentAnswer || keywords.length === 0) {
+      return { matched: 0, total: keywords.length, percent: 0 };
+    }
+    
+    const normalized = normalizeText(studentAnswer);
+    let matched = 0;
+    keywords.forEach(kw => {
+      const kwNorm = normalizeText(kw);
+      if (kwNorm && normalized.includes(kwNorm)) matched++;
+    });
+    
+    return {
+      matched,
+      total: keywords.length,
+      percent: keywords.length > 0 ? Math.round((matched / keywords.length) * 100) : 0
+    };
+  }
+  
+  window.submitExam = function() {
+    if (!currentExam) return;
+    
+    const btn = document.getElementById('submitExamBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري التصحيح...';
+    
+    let earned = 0;
+    let total = 0;
+    const details = [];
+    
+    currentExam.questions.forEach((q, i) => {
+      const studentAns = document.getElementById('ans' + i).value.trim();
+      const result = checkAnswer(studentAns, q.keywords || []);
+      
+      total += q.points;
+      
+      let pointsEarned = 0;
+      if (result.percent >= 70) {
+        pointsEarned = q.points;
+      } else if (result.percent >= 40) {
+        pointsEarned = Math.round(q.points * (result.percent / 100) * 10) / 10;
+      }
+      
+      earned += pointsEarned;
+      
+      details.push({
+        question: q.text,
+        studentAnswer: studentAns,
+        modelAnswer: q.answer,
+        keywords: q.keywords || [],
+        percent: result.percent,
+        matched: result.matched,
+        keywordsCount: result.total,
+        points: q.points,
+        pointsEarned
+      });
+    });
+    
+    examResults[currentExam.id] = {
+      score: earned,
+      total,
+      percent: Math.round((earned / total) * 100),
+      date: new Date().toISOString(),
+      details
+    };
+    localStorage.setItem('exams_' + studentId, JSON.stringify(examResults));
+    
+    saveResultToFirebase(currentExam.id, examResults[currentExam.id]);
+    
+    renderExamResult(currentExam, examResults[currentExam.id]);
+  };
+  
+  async function saveResultToFirebase(examId, result) {
+    try {
+      const studentRef = doc(db, 'students', studentId);
+      const snap = await getDoc(studentRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        const results = data.results || {};
+        results[examId] = {
+          score: result.score,
+          total: result.total,
+          percent: result.percent,
+          date: result.date,
+          examTitle: currentExam.title
+        };
+        await setDoc(studentRef, { results }, { merge: true });
+      }
+    } catch (err) {
+      console.error('خطأ في حفظ النتيجة:', err);
+    }
+  }
+  
+  function renderExamResult(exam, result) {
+    const percent = result.percent;
+    const color = percent >= 50 ? '#22c55e' : '#ef4444';
+    const emoji = percent >= 80 ? '🌟' : percent >= 50 ? '🎉' : '📚';
+    const msg = percent >= 80 ? 'ممتاز!' : percent >= 50 ? 'جيد!' : 'يحتاج مراجعة';
+    
+    let html = `
+      <div class="score-box">
+        <div style="font-size:50px;">${emoji}</div>
+        <h2 style="color:#1e3a8a; margin:8px 0;">${msg}</h2>
+        <div class="score-big" style="color:${color};">${result.score} / ${result.total}</div>
+        <p style="color:#64748b; font-size:14px;">النسبة: ${percent}%</p>
+      </div>
+      
+      <h3 style="color:#7c3aed; font-size:15px; margin:15px 0;">📋 تفاصيل الإجابات:</h3>
+    `;
+    
+    result.details.forEach((d, i) => {
+      let statusClass = 'wrong';
+      let statusLabel = '❌ إجابة غير صحيحة';
+      let statusColor = '#ef4444';
+      
+      if (d.percent >= 70) {
+        statusClass = 'correct';
+        statusLabel = '✅ إجابة صحيحة';
+        statusColor = '#166534';
+      } else if (d.percent >= 40) {
+        statusClass = 'partial';
+        statusLabel = '⚠️ إجابة ناقصة';
+        statusColor = '#92400e';
+      }
+      
+      html += `
+        <div class="question-box">
+          <div class="q-number">سؤال ${i + 1}</div>
+          <div class="q-text">${d.question}</div>
+          
+          <div class="result-answer ${statusClass}">
+            <div class="result-label" style="color:${statusColor};">${statusLabel}</div>
+            <div><b>إجابتك:</b> ${d.studentAnswer || '<i>لم تُجب</i>'}</div>
+            <div style="margin-top:6px; font-size:12px;">
+              الكلمات المفتاحية اللي جبتها: <b>${d.matched}</b> من <b>${d.keywordsCount}</b>
+              • الدرجة: <b>${d.pointsEarned} / ${d.points}</b>
+            </div>
+          </div>
+          
+          <div class="model-answer">
+            <b>📖 الإجابة النموذجية:</b><br>
+            ${d.modelAnswer}
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `<button class="back-btn" onclick="loadExams()">📋 رجوع للامتحانات</button>`;
+    
+    document.getElementById('examsList').innerHTML = html;
+    window.scrollTo(0, 0);
+  }
+  
+  // ============ النتائج ============
+  function renderResults() {
+    const list = document.getElementById('resultsList');
+    const keys = Object.keys(examResults);
+    
+    if (keys.length === 0) {
+      list.innerHTML = '<div class="empty">لم تحل أي امتحان بعد 📊</div>';
+      return;
+    }
+    
+    let html = '';
+    keys.forEach(k => {
+      const r = examResults[k];
+      const color = r.percent >= 50 ? '#22c55e' : '#ef4444';
+      const exam = allExams.find(e => e.id === k);
+      const title = exam ? exam.title : 'امتحان محذوف';
+      
+      html += `
+        <div class="card" style="cursor:default; border-right-color:${color};">
+          <div class="card-title">${title}</div>
+          <div class="card-meta">
+            <span class="badge" style="background:${color}22; color:${color};">
+              النتيجة: ${r.score} / ${r.total} (${r.percent}%)
+            </span>
+            <span class="badge badge-blue">📅 ${new Date(r.date).toLocaleDateString('ar-EG')}</span>
+          </div>
+        </div>
+      `;
+    });
+    
+    const avg = Math.round(keys.reduce((s, k) => s + examResults[k].percent, 0) / keys.length);
+    html = `
+      <div class="score-box" style="margin-bottom:15px;">
+        <div style="font-size:44px;">📊</div>
+        <h3 style="color:#1e3a8a; margin:8px 0;">متوسطك العام</h3>
+        <div class="score-big" style="color:${avg >= 50 ? '#22c55e' : '#ef4444'};">${avg}%</div>
+      </div>
+    ` + html;
+    
+    list.innerHTML = html;
+  }
+  
+  // ============ خروج ============
+  window.logout = function() {
+    if (confirm('متأكد إنك عايز تخرج؟')) {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  };
+  
+  // ============ تشغيل ============
+  loadLessons();
+  loadExams();
+</script>
+
+</body>
+</html>

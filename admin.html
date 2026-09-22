@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة المالك - التوأم</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
+  body { background: #f1f5f9; min-height: 100vh; padding: 15px; }
+  .container { max-width: 620px; margin: 0 auto; }
+  
+  .header {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff; padding: 20px; border-radius: 20px;
+    text-align: center; margin-bottom: 18px;
+    box-shadow: 0 10px 30px rgba(124,58,237,0.3);
+  }
+  .header h1 { font-size: 22px; margin-bottom: 5px; }
+  .header p { font-size: 13px; opacity: 0.9; }
+  
+  .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab {
+    flex: 1; padding: 12px 8px; background: #fff; border: none;
+    border-radius: 12px; font-weight: bold; color: #64748b;
+    cursor: pointer; font-family: inherit; font-size: 13px;
+    transition: 0.3s;
+  }
+  .tab.active { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; }
+  
+  .card {
+    background: #fff; border-radius: 16px; padding: 20px;
+    margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  }
+  
+  .field { margin-bottom: 14px; }
+  label { display: block; color: #334155; font-size: 13px; font-weight: bold; margin-bottom: 6px; }
+  
+  input, select, textarea {
+    width: 100%; padding: 12px; border: 2px solid #e2e8f0;
+    border-radius: 10px; font-size: 14px; background: #f8fafc; font-family: inherit;
+    color: #1e293b;
+  }
+  textarea { min-height: 65px; resize: vertical; }
+  
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: #a855f7; background: #fff;
+    box-shadow: 0 0 0 4px rgba(168,85,247,0.1);
+  }
+  
+  .file-picker {
+    display: block; width: 100%;
+    padding: 22px 15px; border: 2px dashed #a855f7;
+    border-radius: 12px; background: #faf5ff;
+    text-align: center; cursor: pointer;
+    transition: 0.3s;
+  }
+  .file-picker:hover { background: #f3e8ff; }
+  .file-picker input { display: none; }
+  .file-picker .icon { font-size: 38px; margin-bottom: 8px; }
+  .file-picker .text { color: #7c3aed; font-weight: bold; font-size: 14px; }
+  .file-picker .subtext { color: #94a3b8; font-size: 11px; margin-top: 4px; }
+  
+  .file-name { color: #166534; font-size: 13px; margin-top: 10px; text-align: center; font-weight: bold; }
+  
+  .progress-bar {
+    width: 100%; height: 10px; background: #e2e8f0;
+    border-radius: 5px; margin-top: 12px; overflow: hidden; display: none;
+  }
+  .progress-bar.active { display: block; }
+  .progress-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #7c3aed, #a855f7);
+    transition: width 0.3s;
+  }
+  
+  .btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: bold; cursor: pointer;
+    font-family: inherit; margin-top: 10px;
+    transition: 0.3s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .btn-blue { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
+  .btn-green { background: linear-gradient(135deg, #16a34a, #22c55e); }
+  
+  .msg {
+    padding: 12px; border-radius: 10px; text-align: center;
+    margin-top: 12px; display: none; font-size: 14px;
+  }
+  .msg.error { background: #fee2e2; color: #991b1b; display: block; }
+  .msg.success { background: #dcfce7; color: #166534; display: block; }
+  .msg.info { background: #dbeafe; color: #1e40af; display: block; }
+  
+  .item {
+    background: #f8fafc; padding: 12px; border-radius: 10px;
+    margin-bottom: 10px; display: flex; justify-content: space-between;
+    align-items: center; gap: 10px; border-right: 4px solid #a855f7;
+  }
+  .item-info { flex: 1; }
+  .item-title { font-weight: bold; color: #1e293b; font-size: 14px; margin-bottom: 3px; }
+  .item-meta { font-size: 12px; color: #64748b; }
+  .del-btn {
+    background: #ef4444; color: #fff; border: none;
+    padding: 8px 12px; border-radius: 8px;
+    cursor: pointer; font-family: inherit; font-size: 13px;
+  }
+  
+  .question-card {
+    background: #faf5ff; border: 2px dashed #c084fc;
+    padding: 15px; border-radius: 14px; margin-bottom: 14px;
+  }
+  
+  .empty {
+    text-align: center; color: #94a3b8; padding: 30px;
+    font-size: 14px;
+  }
+  
+  .hint {
+    background: #fef3c7; color: #92400e; font-size: 12px;
+    padding: 10px; border-radius: 8px; margin-bottom: 15px;
+    line-height: 1.6;
+  }
+  
+  .settings-icon {
+    text-align: center; font-size: 60px; margin-bottom: 15px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>👑 لوحة المالك</h1>
+    <p>إدارة منصة التوأم</p>
+  </div>
+  
+  <div id="loginScreen" class="card">
+    <h2 style="color:#7c3aed; margin-bottom:15px; font-size:18px;">🔐 دخول المالك</h2>
+    <div class="field">
+      <label>كلمة السر</label>
+      <input type="password" id="adminPass" placeholder="ادخل كلمة السر">
+    </div>
+    <button class="btn" onclick="adminLogin()">دخول</button>
+    <div class="msg" id="loginMsg"></div>
+  </div>
+  
+  <div id="adminPanel" style="display:none;">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('lessonsTab', this)">📚 الحصص</button>
+      <button class="tab" onclick="switchTab('examsTab', this)">📝 الامتحانات</button>
+      <button class="tab" onclick="switchTab('settingsTab', this)">⚙️ الإعدادات</button>
+    </div>
+    
+    <!-- ============ قسم الحصص ============ -->
+    <div id="lessonsTab">
+      <div class="card">
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">➕ إضافة درس جديد</h3>
+        
+        <div class="field">
+          <label>عنوان الدرس</label>
+          <input type="text" id="lessonTitle" placeholder="مثال: الدرس الأول - الجبر">
+        </div>
+        
+        <div class="field">
+          <label>الوصف</label>
+          <textarea id="lessonDesc" placeholder="وصف مختصر للدرس"></textarea>
+        </div>
+        
+        <div class="field">
+          <label>الفيديو (من الجاليري)</label>
+          <label class="file-picker" for="lessonVideoFile">
+            <div class="icon">🎬</div>
+            <div class="text">اضغط لاختيار فيديو</div>
+            <div class="subtext">MP4, MOV, WEBM</div>
+            <input type="file" id="lessonVideoFile" accept="video/*" onchange="onVideoSelected(event)">
+          </label>
+          <div class="file-name" id="fileName"></div>
+          <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        
+        <div class="field">
+          <label>المرحلة</label>
+          <select id="lessonGrade">
+            <option value="all">كل المراحل</option>
+            <option value="sec2">تانية بكالوريا</option>
+            <option value="sec3">تالتة بكالوريا</option>
+          </select>
+        </div>
+        
+        <div class="field">
+          <label>المدة</label>
+          <input type="text" id="lessonDuration" placeholder="مثال: 20 دقيقة">
+        </div>
+        
+        <button class="btn" id="saveLessonBtn" onclick="addLesson()">💾 حفظ الدرس</button>
+        <div class="msg" id="lessonMsg"></div>
+      </div>
+      
+      <div class="card">
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">📋 الحصص المنشورة</h3>
+        <div id="lessonsList"></div>
+      </div>
+    </div>
+    
+    <!-- ============ قسم الامتحانات ============ -->
+    <div id="examsTab" style="display:none;">
+      <div class="card">
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">➕ إضافة امتحان</h3>
+        
+        <div class="hint">
+          💡 <b>طريقة العمل:</b><br>
+          1. اختار صورة ورقة الامتحان (اختياري)<br>
+          2. أضف الأسئلة + الإجابة النموذجية + الكلمات المفتاحية<br>
+          3. المنصة هتصحح إجابات الطالب تلقائياً
+        </div>
+        
+        <div class="field">
+          <label>عنوان الامتحان</label>
+          <input type="text" id="examTitle" placeholder="مثال: امتحان الوحدة الأولى">
+        </div>
+        
+        <div class="field">
+          <label>المرحلة</label>
+          <select id="examGrade">
+            <option value="all">كل المراحل</option>
+            <option value="sec2">تانية بكالوريا</option>
+            <option value="sec3">تالتة بكالوريا</option>
+          </select>
+        </div>
+        
+        <div class="field">
+          <label>المدة (اختياري)</label>
+          <input type="text" id="examDuration" placeholder="مثال: ساعة">
+        </div>
+        
+        <div class="field">
+          <label>صورة ورقة الامتحان (اختياري)</label>
+          <label class="file-picker" for="examImageFile">
+            <div class="icon">📝</div>
+            <div class="text">اضغط لاختيار صورة الامتحان</div>
+            <div class="subtext">JPG, PNG, PDF</div>
+            <input type="file" id="examImageFile" accept="image/*,application/pdf" onchange="onExamFileSelected(event)">
+          </label>
+          <div class="file-name" id="examFileName"></div>
+          <div class="progress-bar" id="examProgressBar">
+            <div class="progress-fill" id="examProgressFill"></div>
+          </div>
+        </div>
+        
+        <hr style="margin:22px 0; border:none; border-top:2px dashed #c084fc;">
+        
+        <h4 style="color:#7c3aed; margin-bottom:8px; font-size:15px;">📝 الأسئلة ونموذج الإجابة</h4>
+        <p style="color:#64748b; font-size:12px; margin-bottom:15px; line-height:1.6;">
+          لكل سؤال، اكتب:<br>
+          • نص السؤال<br>
+          • الإجابة النموذجية<br>
+          • الكلمات المفتاحية (افصل بينها بفاصلة)
+        </p>
+        
+        <div id="questionsArea"></div>
+        
+        <button class="btn btn-blue" onclick="addQuestionField()">➕ إضافة سؤال</button>
+        <button class="btn" id="saveExamBtn" onclick="saveExam()">💾 حفظ الامتحان</button>
+        <div class="msg" id="examMsg"></div>
+      </div>
+      
+      <div class="card">
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">📋 الامتحانات المنشورة</h3>
+        <div id="examsList"></div>
+      </div>
+    </div>
+    
+    <!-- ============ قسم الإعدادات ============ -->
+    <div id="settingsTab" style="display:none;">
+      <div class="card">
+        <div class="settings-icon">⚙️</div>
+        <h3 style="color:#7c3aed; margin-bottom:8px; font-size:17px; text-align:center;">إعدادات المنصة</h3>
+        <p style="color:#64748b; font-size:13px; text-align:center; margin-bottom:20px;">
+          البيانات دي بتظهر للطلاب في المنصة
+        </p>
+        
+        <div class="hint">
+          💡 <b>مهم:</b> اكتب رقم الواتساب بالصيغة الدولية<br>
+          (بدون + وبدون 0 في الأول)<br>
+          <b>مثال:</b> لو رقمك <code>01220217671</code><br>
+          اكتبه: <code>201220217671</code>
+        </div>
+        
+        <div class="field">
+          <label>📱 رقم واتساب الدعم الفني</label>
+          <input type="tel" id="supportPhone" placeholder="مثال: 201220217671">
+        </div>
+        
+        <button class="btn btn-green" id="saveSettingsBtn" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+        <div class="msg" id="settingsMsg"></div>
+        
+        <div style="margin-top:20px; padding:15px; background:#f0fdf4; border-radius:12px; border-right:4px solid #22c55e;">
+          <p style="color:#166534; font-size:13px; line-height:1.7;">
+            ✅ لما تحفظ الرقم ده، هيظهر للطلاب في صفحة الدخول كلينك "تواصل مع الدعم الفني على واتساب"
+          </p>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+  
+  const firebaseConfig = {
+    apiKey: "AIzaSyACH2wbuP9VmpfmZIXj5He8c4FWzYLNqk4",
+    authDomain: "altwin-ea6c9.firebaseapp.com",
+    projectId: "altwin-ea6c9",
+    storageBucket: "altwin-ea6c9.firebasestorage.app",
+    messagingSenderId: "728148068456",
+    appId: "1:728148068456:web:edc9628e10b27d8eef53dd"
+  };
+  
+  const CLOUDINARY_CLOUD_NAME = "ضع_هنا_cloud_name";
+  const CLOUDINARY_UPLOAD_PRESET = "ضع_هنا_preset_name";
+  
+  const ADMIN_PASSWORD = "TWIN2025ADMIN";
+  
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  
+  let selectedVideoFile = null;
+  let selectedExamFile = null;
+  let questionCount = 0;
+  
+  // ============ تسجيل الدخول ============
+  window.adminLogin = function() {
+    const pass = document.getElementById('adminPass').value;
+    const msg = document.getElementById('loginMsg');
+    if (pass === ADMIN_PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      sessionStorage.setItem('isAdmin', '1');
+      loadLessons();
+      loadExams();
+    } else {
+      msg.textContent = '❌ كلمة السر غلط';
+      msg.className = 'msg error';
+    }
+  };
+  
+  if (sessionStorage.getItem('isAdmin') === '1') {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    loadLessons();
+    loadExams();
+  }
+  
+  // ============ التابات ============
+  window.switchTab = function(id, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('lessonsTab').style.display = 'none';
+    document.getElementById('examsTab').style.display = 'none';
+    document.getElementById('settingsTab').style.display = 'none';
+    document.getElementById(id).style.display = 'block';
+    if (id === 'settingsTab') loadSettings();
+  };
+  
+  // ============ اختيار الملفات ============
+  window.onVideoSelected = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedVideoFile = file;
+    document.getElementById('fileName').textContent = 
+      `✅ ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} ميجا)`;
+  };
+  
+  window.onExamFileSelected = function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedExamFile = file;
+    document.getElementById('examFileName').textContent = 
+      `✅ ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} ميجا)`;
+  };
+  
+  function uploadToCloudinary(file, folder, progressEl, progressBarEl, msgEl) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('folder', folder);
+    
+    const isVideo = file.type.startsWith('video');
+    const resourceType = isVideo ? 'video' : 'auto';
+    const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
+    
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', url);
+      
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+          const percent = Math.round((e.loaded / e.total) * 100);
+          if (progressEl) progressEl.style.width = percent + '%';
+          if (msgEl) {
+            msgEl.textContent = `⬆️ جاري الرفع... ${percent}%`;
+            msgEl.className = 'msg info';
+          }
+        }
+      };
+      
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const res = JSON.parse(xhr.responseText);
+          resolve({
+            url: res.secure_url,
+            type: isVideo ? 'video' : (file.type.includes('pdf') ? 'pdf' : 'image')
+          });
+        } else {
+          reject(new Error('فشل الرفع: ' + xhr.status));
+        }
+      };
+      
+      xhr.onerror = () => reject(new Error('خطأ في الشبكة'));
+      xhr.send(formData);
+    });
+  }
+  
+  // ============ إضافة درس ============
+  window.addLesson = async function() {
+    const title = document.getElementById('lessonTitle').value.trim();
+    const desc = document.getElementById('lessonDesc').value.trim();
+    const grade = document.getElementById('lessonGrade').value;
+    const duration = document.getElementById('lessonDuration').value.trim() || '—';
+    const msg = document.getElementById('lessonMsg');
+    const btn = document.getElementById('saveLessonBtn');
+    
+    if (!title) {
+      msg.textContent = '⚠️ اكتب عنوان الدرس';
+      msg.className = 'msg error';
+      return;
+    }
+    
+    if (!selectedVideoFile) {
+      msg.textContent = '⚠️ اختر فيديو من الجاليري';
+      msg.className = 'msg error';
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري الرفع...';
+    document.getElementById('progressBar').classList.add('active');
+    document.getElementById('progressFill').style.width = '0%';
+    
+    try {
+      const result = await uploadToCloudinary(
+        selectedVideoFile, 'twin_lessons',
+        document.getElementById('progressFill'),
+        document.getElementById('progressBar'),
+        msg
+      );
+      
+      msg.textContent = '💾 جاري حفظ الدرس...';
+      msg.className = 'msg info';
+      
+      await addDoc(collection(db, 'lessons'), {
+        title, desc, grade, duration,
+        videoUrl: result.url,
+        createdAt: new Date().toISOString()
+      });
+      
+      msg.textContent = '✅ تم حفظ الدرس بنجاح';
+      msg.className = 'msg success';
+      
+      document.getElementById('lessonTitle').value = '';
+      document.getElementById('lessonDesc').value = '';
+      document.getElementById('lessonDuration').value = '';
+      document.getElementById('lessonVideoFile').value = '';
+      document.getElementById('fileName').textContent = '';
+      document.getElementById('progressBar').classList.remove('active');
+      selectedVideoFile = null;
+      
+      loadLessons();
+      
+    } catch (err) {
+      console.error(err);
+      msg.textContent = '❌ ' + err.message;
+      msg.className = 'msg error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '💾 حفظ الدرس';
+    }
+  };
+  
+  async function loadLessons() {
+    const list = document.getElementById('lessonsList');
+    list.innerHTML = '<div class="empty">جاري التحميل...</div>';
+    try {
+      const snap = await getDocs(collection(db, 'lessons'));
+      if (snap.empty) {
+        list.innerHTML = '<div class="empty">لا توجد حصص بعد 📭</div>';
+        return;
+      }
+      let html = '';
+      snap.forEach(d => {
+        const l = d.data();
+        html += `
+          <div class="item">
+            <div class="item-info">
+              <div class="item-title">${l.title}</div>
+              <div class="item-meta">${l.grade} • ${l.duration}</div>
+            </div>
+            <button class="del-btn" onclick="deleteLesson('${d.id}')">🗑️</button>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
+    } catch (err) {
+      list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>';
+    }
+  }
+  
+  window.deleteLesson = async function(id) {
+    if (!confirm('متأكد من حذف الدرس؟')) return;
+    await deleteDoc(doc(db, 'lessons', id));
+    loadLessons();
+  };
+  
+  // ============ إضافة سؤال ============
+  window.addQuestionField = function() {
+    const area = document.getElementById('questionsArea');
+    const idx = questionCount++;
+    const html = `
+      <div class="question-card" id="q${idx}">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <strong style="color:#7c3aed;">سؤال ${idx + 1}</strong>
+          <button class="del-btn" onclick="document.getElementById('q${idx}').remove()" style="padding:5px 10px;">✕</button>
+        </div>
+        
+        <div class="field">
+          <label>نص السؤال</label>
+          <textarea class="q-text" placeholder="اكتب السؤال هنا"></textarea>
+        </div>
+        
+        <div class="field">
+          <label>الإجابة النموذجية</label>
+          <textarea class="q-answer" placeholder="اللي الطالب هيشوفه بعد التصحيح"></textarea>
+        </div>
+        
+        <div class="field">
+          <label>الكلمات المفتاحية</label>
+          <input type="text" class="q-keywords" placeholder="مثال: ساكن, سرعة, قوة">
+        </div>
+        
+        <div class="field" style="margin-bottom:0;">
+          <label>الدرجة</label>
+          <input type="number" class="q-points" value="1" min="1">
+        </div>
+      </div>
+    `;
+    area.insertAdjacentHTML('beforeend', html);
+  };
+  
+  window.saveExam = async function() {
+    const title = document.getElementById('examTitle').value.trim();
+    const grade = document.getElementById('examGrade').value;
+    const duration = document.getElementById('examDuration').value.trim() || '—';
+    const msg = document.getElementById('examMsg');
+    const btn = document.getElementById('saveExamBtn');
+    
+    if (!title) {
+      msg.textContent = '⚠️ اكتب عنوان الامتحان';
+      msg.className = 'msg error';
+      return;
+    }
+    
+    const questions = [];
+    document.querySelectorAll('#questionsArea .question-card').forEach(qEl => {
+      const text = qEl.querySelector('.q-text').value.trim();
+      const answer = qEl.querySelector('.q-answer').value.trim();
+      const keywordsRaw = qEl.querySelector('.q-keywords').value.trim();
+      const points = parseInt(qEl.querySelector('.q-points').value) || 1;
+      
+      if (text && answer) {
+        const keywords = keywordsRaw
+          .split(/[,،]/)
+          .map(k => k.trim())
+          .filter(Boolean);
+        
+        questions.push({ text, answer, keywords, points });
+      }
+    });
+    
+    if (questions.length === 0) {
+      msg.textContent = '⚠️ أضف سؤال واحد على الأقل';
+      msg.className = 'msg error';
+      return;
+    }
+    
+    btn.disabled = true;
+    document.getElementById('examProgressBar').classList.add('active');
+    document.getElementById('examProgressFill').style.width = '0%';
+    
+    try {
+      let imageData = null;
+      
+      if (selectedExamFile) {
+        btn.textContent = '⏳ جاري رفع الصورة...';
+        imageData = await uploadToCloudinary(
+          selectedExamFile, 'twin_exams',
+          document.getElementById('examProgressFill'),
+          document.getElementById('examProgressBar'),
+          msg
+        );
+      }
+      
+      btn.textContent = '💾 جاري الحفظ...';
+      msg.textContent = '💾 جاري حفظ الامتحان...';
+      msg.className = 'msg info';
+      
+      await addDoc(collection(db, 'exams'), {
+        title, grade, duration, questions,
+        imageUrl: imageData ? imageData.url : null,
+        imageType: imageData ? imageData.type : null,
+        totalPoints: questions.reduce((s, q) => s + q.points, 0),
+        createdAt: new Date().toISOString()
+      });
+      
+      msg.textContent = '✅ تم حفظ الامتحان بنجاح';
+      msg.className = 'msg success';
+      
+      document.getElementById('examTitle').value = '';
+      document.getElementById('examDuration').value = '';
+      document.getElementById('examImageFile').value = '';
+      document.getElementById('examFileName').textContent = '';
+      document.getElementById('questionsArea').innerHTML = '';
+      document.getElementById('examProgressBar').classList.remove('active');
+      selectedExamFile = null;
+      questionCount = 0;
+      
+      loadExams();
+      
+    } catch (err) {
+      console.error(err);
+      msg.textContent = '❌ ' + err.message;
+      msg.className = 'msg error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '💾 حفظ الامتحان';
+    }
+  };
+  
+  async function loadExams() {
+    const list = document.getElementById('examsList');
+    list.innerHTML = '<div class="empty">جاري التحميل...</div>';
+    try {
+      const snap = await getDocs(collection(db, 'exams'));
+      if (snap.empty) {
+        list.innerHTML = '<div class="empty">لا توجد امتحانات بعد 📭</div>';
+        return;
+      }
+      let html = '';
+      snap.forEach(d => {
+        const e = d.data();
+        const qCount = e.questions ? e.questions.length : 0;
+        const total = e.totalPoints || 0;
+        html += `
+          <div class="item">
+            <div class="item-info">
+              <div class="item-title">${e.title}</div>
+              <div class="item-meta">${qCount} سؤال • ${total} درجة • ${e.duration}</div>
+            </div>
+            <button class="del-btn" onclick="deleteExam('${d.id}')">🗑️</button>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
+    } catch (err) {
+      list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>';
+    }
+  }
+  
+  window.deleteExam = async function(id) {
+    if (!confirm('متأكد من حذف الامتحان؟')) return;
+    await deleteDoc(doc(db, 'exams', id));
+    loadExams();
+  };
+  
+  // ============ الإعدادات ============
+  async function loadSettings() {
+    const input = document.getElementById('supportPhone');
+    const msg = document.getElementById('settingsMsg');
+    msg.className = 'msg';
+    msg.style.display = 'none';
+    
+    try {
+      const snap = await getDoc(doc(db, 'settings', 'support'));
+      if (snap.exists()) {
+        input.value = snap.data().whatsapp || '';
+      } else {
+        input.value = '';
+      }
+    } catch (err) {
+      console.error('خطأ في تحميل الإعدادات:', err);
+    }
+  }
+  
+  window.saveSettings = async function() {
+    const phone = document.getElementById('supportPhone').value.trim();
+    const msg = document.getElementById('settingsMsg');
+    const btn = document.getElementById('saveSettingsBtn');
+    
+    if (!phone) {
+      msg.textContent = '⚠️ اكتب رقم الواتساب الأول';
+      msg.className = 'msg error';
+      return;
+    }
+    
+    // تحقق من الصيغة
+    if (!/^\d{10,15}$/.test(phone)) {
+      msg.textContent = '⚠️ الرقم لازم يكون أرقام بس (10-15 رقم)';
+      msg.className = 'msg error';
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري الحفظ...';
+    
+    try {
+      await setDoc(doc(db, 'settings', 'support'), {
+        whatsapp: phone,
+        updatedAt: new Date().toISOString()
+      });
+      
+      msg.textContent = '✅ تم حفظ الإعدادات بنجاح';
+      msg.className = 'msg success';
+      
+    } catch (err) {
+      console.error(err);
+      msg.textContent = '❌ ' + err.message;
+      msg.className = 'msg error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '💾 حفظ الإعدادات';
+    }
+  };
+</script>
+
+</body>
+</html>
