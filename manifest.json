@@ -1,0 +1,20 @@
+{
+  "name": "منصة Twins التعليمية",
+  "short_name": "Twins",
+  "description": "منصة تعليمية متكاملة",
+  "start_url": "/altwin/index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1e3a8a",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
