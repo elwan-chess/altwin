@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد أيقونة Twins</title>
+<style>
+  body { font-family: Tahoma; background: #f1f5f9; padding: 20px; text-align: center; margin: 0; }
+  h1 { color: #1e3a8a; font-size: 22px; }
+  .small { color: #64748b; font-size: 13px; margin: 10px 0 20px; }
+  .preview {
+    display: inline-block; margin: 15px auto; padding: 15px;
+    background: #fff; border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(30,58,138,0.15);
+  }
+  canvas { display: block; border-radius: 24px; }
+  .btn {
+    display: block; width: 100%; max-width: 320px; margin: 12px auto;
+    padding: 15px; background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    color: #fff; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: bold; cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+
+<h1>🎨 مولّد أيقونة Twins</h1>
+<p class="small">اضغط على الأزرار لتحميل الأيقونات</p>
+
+<div class="preview">
+  <canvas id="previewCanvas" width="512" height="512" style="width:220px; height:220px;"></canvas>
+</div>
+
+<button class="btn" onclick="download(512)">⬇️ تحميل icon-512.png</button>
+<button class="btn" onclick="download(192)">⬇️ تحميل icon-192.png</button>
+
+<script>
+  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="55%" stop-color="#2563eb"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#dbeafe"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="110" fill="url(#bg)"/>
+  <circle cx="440" cy="80" r="60" fill="#ffffff" opacity="0.08"/>
+  <circle cx="70" cy="450" r="90" fill="#ffffff" opacity="0.06"/>
+  <g transform="translate(256, 190)">
+    <path d="M -140 -5 L 0 -65 L 140 -5 L 0 55 Z" fill="url(#cap)"/>
+    <path d="M -90 22 L -90 85 Q 0 120 90 85 L 90 22 L 0 60 Z" fill="url(#cap)" opacity="0.92"/>
+    <circle cx="140" cy="5" r="10" fill="#fbbf24"/>
+    <path d="M 140 15 Q 141 58 139 82" stroke="#fbbf24" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <circle cx="139" cy="87" r="8" fill="#fbbf24"/>
+  </g>
+  <text x="256" y="440" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-size="128" font-weight="900" fill="#ffffff" letter-spacing="2">Twins</text>
+</svg>`;
+
+  function svgToDataUrl() {
+    return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+  }
+
+  function drawTo(canvas) {
+    const img = new Image();
+    img.onload = () => {
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    img.src = svgToDataUrl();
+  }
+
+  drawTo(document.getElementById('previewCanvas'));
+
+  function download(size) {
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const img = new Image();
+    img.onload = () => {
+      canvas.getContext('2d').drawImage(img, 0, 0, size, size);
+      canvas.toBlob(blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'icon-' + size + '.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }, 'image/png');
+    };
+    img.src = svgToDataUrl();
+  }
+</script>
+
+</body>
+</html>

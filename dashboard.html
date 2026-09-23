@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة الطالب - منصة التوأم</title>
+<title>لوحة الطالب - Twins</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
   body { background: #f1f5f9; min-height: 100vh; padding-bottom: 30px; }
@@ -15,85 +15,51 @@
     box-shadow: 0 10px 25px rgba(30,58,138,0.3);
     position: sticky; top: 0; z-index: 100;
   }
-  
-  .header-top {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 12px;
-    gap: 8px;
-  }
-  
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
   .logo-small { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: bold; }
   .logo-small span:first-child { font-size: 26px; }
-  
-  .header-buttons {
-    display: flex; gap: 8px; align-items: center;
-  }
-  
+  .header-buttons { display: flex; gap: 8px; align-items: center; }
   .icon-btn {
-    background: rgba(255,255,255,0.2); border: none;
-    color: #fff; padding: 8px 12px; border-radius: 10px;
-    font-size: 14px; cursor: pointer; font-family: inherit;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+    background: rgba(255,255,255,0.2); border: none; color: #fff;
+    padding: 8px 12px; border-radius: 10px; font-size: 14px;
+    cursor: pointer; font-family: inherit; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px;
   }
-  
-  .icon-btn.support-btn-header {
-    background: linear-gradient(135deg, #16a34a, #22c55e);
-    display: none;
-  }
+  .icon-btn.support-btn-header { background: linear-gradient(135deg, #16a34a, #22c55e); display: none; }
   .icon-btn.support-btn-header.show { display: inline-flex; }
-  
   .welcome { font-size: 14px; opacity: 0.95; }
-  
   .student-info {
-    background: rgba(255,255,255,0.15);
-    padding: 10px 12px; border-radius: 12px;
-    margin-top: 10px; font-size: 12px;
-    display: flex; gap: 12px; flex-wrap: wrap;
+    background: rgba(255,255,255,0.15); padding: 10px 12px; border-radius: 12px;
+    margin-top: 10px; font-size: 12px; display: flex; gap: 12px; flex-wrap: wrap;
   }
   
   .tabs { display: flex; gap: 8px; padding: 18px 15px 10px; overflow-x: auto; }
   .tab {
-    padding: 10px 20px; background: #fff; border: none;
-    border-radius: 25px; font-size: 13px; font-weight: bold;
-    color: #64748b; cursor: pointer; white-space: nowrap;
-    transition: 0.3s; font-family: inherit;
+    padding: 10px 20px; background: #fff; border: none; border-radius: 25px;
+    font-size: 13px; font-weight: bold; color: #64748b; cursor: pointer;
+    white-space: nowrap; font-family: inherit;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
-  .tab.active {
-    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-    color: #fff;
-    box-shadow: 0 5px 15px rgba(59,130,246,0.4);
-  }
+  .tab.active { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: #fff; }
   
   .content { padding: 10px 15px; }
   .section { display: none; }
-  .section.active { display: block; animation: fadeIn 0.4s; }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  .section.active { display: block; }
   
   .card {
     background: #fff; border-radius: 16px; padding: 16px;
     margin-bottom: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-    transition: 0.3s; cursor: pointer;
-    border-right: 4px solid #3b82f6;
+    cursor: pointer; border-right: 4px solid #3b82f6;
     position: relative;
   }
   .card:active { transform: scale(0.98); }
+  .card.locked { cursor: not-allowed; opacity: 0.85; }
   
   .card-title { font-size: 15px; font-weight: bold; color: #1e293b; margin-bottom: 6px; }
   .card-desc { font-size: 13px; color: #64748b; line-height: 1.6; }
   .card-meta { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
   
-  .badge {
-    display: inline-block; padding: 4px 10px; border-radius: 8px;
-    font-size: 11px; font-weight: bold;
-  }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; }
   .badge-blue { background: #dbeafe; color: #1e40af; }
   .badge-green { background: #dcfce7; color: #166534; }
   .badge-orange { background: #fed7aa; color: #9a3412; }
@@ -104,48 +70,34 @@
     position: absolute; top: 12px; left: 12px;
     background: #22c55e; color: #fff;
     width: 26px; height: 26px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
   }
   
   .overlay {
-    display: none; position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.9); z-index: 1000;
-    padding: 15px; overflow-y: auto;
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9); z-index: 1000; padding: 15px; overflow-y: auto;
   }
   .overlay.active { display: block; }
-  
   .overlay-box {
-    background: #fff; border-radius: 16px;
-    max-width: 700px; margin: 30px auto; padding: 18px;
-    position: relative;
+    background: #fff; border-radius: 16px; max-width: 700px;
+    margin: 30px auto; padding: 18px; position: relative;
   }
-  
   .close-btn {
     position: absolute; top: 12px; left: 12px;
-    background: #ef4444; color: #fff;
-    border: none; width: 32px; height: 32px;
-    border-radius: 50%; font-size: 16px; cursor: pointer;
-    font-family: inherit;
+    background: #ef4444; color: #fff; border: none;
+    width: 32px; height: 32px; border-radius: 50%; font-size: 16px;
+    cursor: pointer; font-family: inherit;
   }
-  
   .video-wrapper {
-    position: relative; padding-bottom: 56.25%;
-    height: 0; margin: 15px 0; border-radius: 12px;
-    overflow: hidden; background: #000;
+    position: relative; padding-bottom: 56.25%; height: 0;
+    margin: 15px 0; border-radius: 12px; overflow: hidden; background: #000;
   }
-  .video-wrapper video, .video-wrapper iframe {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-  }
-  
+  .video-wrapper video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
   .complete-btn {
     width: 100%; padding: 14px;
     background: linear-gradient(135deg, #16a34a, #22c55e);
     color: #fff; border: none; border-radius: 12px;
-    font-size: 15px; font-weight: bold; cursor: pointer;
-    margin-top: 15px; font-family: inherit;
+    font-size: 15px; font-weight: bold; cursor: pointer; font-family: inherit;
   }
   .complete-btn.done { background: #cbd5e1; cursor: not-allowed; }
   
@@ -157,83 +109,65 @@
   .exam-header h2 { font-size: 18px; margin-bottom: 5px; }
   .exam-header p { font-size: 13px; opacity: 0.9; }
   
-  .exam-image {
-    width: 100%; border-radius: 12px;
-    margin-bottom: 15px; border: 2px solid #e2e8f0;
+  .timer-bar {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: #fff; padding: 12px; border-radius: 12px;
+    margin-bottom: 15px; display: flex;
+    justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: 0 4px 15px rgba(220,38,38,0.4);
+  }
+  .timer-bar.warning { background: linear-gradient(135deg, #ea580c, #f97316); }
+  .timer-bar.danger { animation: pulse 1s infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  .timer-time { font-size: 22px; font-weight: bold; font-family: 'Courier New', monospace; }
+  
+  .model-badge {
+    background: #f3e8ff; color: #6b21a8;
+    padding: 8px 14px; border-radius: 10px;
+    font-weight: bold; font-size: 14px;
+    display: inline-block; margin-bottom: 12px;
   }
   
   .question-box {
-    background: #fff; border-radius: 14px;
-    padding: 15px; margin-bottom: 14px;
-    border-right: 4px solid #3b82f6;
+    background: #fff; border-radius: 14px; padding: 15px;
+    margin-bottom: 14px; border-right: 4px solid #3b82f6;
     box-shadow: 0 3px 12px rgba(0,0,0,0.05);
   }
-  
   .q-number {
-    display: inline-block;
-    background: #dbeafe; color: #1e40af;
-    padding: 4px 10px; border-radius: 8px;
-    font-size: 12px; font-weight: bold;
-    margin-bottom: 10px;
+    display: inline-block; background: #dbeafe; color: #1e40af;
+    padding: 4px 10px; border-radius: 8px; font-size: 12px;
+    font-weight: bold; margin-bottom: 10px;
   }
-  
-  .q-text {
-    font-size: 15px; font-weight: bold;
-    color: #1e293b; margin-bottom: 12px;
-    line-height: 1.7;
-  }
-  
+  .q-text { font-size: 15px; font-weight: bold; color: #1e293b; margin-bottom: 12px; line-height: 1.7; }
   .q-answer-input {
-    width: 100%; padding: 12px;
-    border: 2px solid #e2e8f0; border-radius: 10px;
-    font-size: 14px; font-family: inherit;
-    min-height: 100px; resize: vertical;
-    background: #f8fafc; color: #1e293b;
+    width: 100%; padding: 12px; border: 2px solid #e2e8f0;
+    border-radius: 10px; font-size: 14px; font-family: inherit;
+    min-height: 100px; resize: vertical; background: #f8fafc; color: #1e293b;
   }
   .q-answer-input:focus {
-    outline: none; border-color: #3b82f6;
-    background: #fff;
-    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+    outline: none; border-color: #3b82f6; background: #fff;
   }
   
-  .result-answer {
-    margin-top: 12px; padding: 12px;
-    border-radius: 10px;
-    font-size: 13px; line-height: 1.7;
-  }
-  .result-answer.correct {
-    background: #dcfce7; border-right: 4px solid #22c55e;
-  }
-  .result-answer.partial {
-    background: #fef3c7; border-right: 4px solid #f59e0b;
-  }
-  .result-answer.wrong {
-    background: #fee2e2; border-right: 4px solid #ef4444;
-  }
-  
-  .result-label {
-    font-weight: bold; font-size: 12px;
-    margin-bottom: 6px;
-  }
-  
+  .result-answer { margin-top: 12px; padding: 12px; border-radius: 10px; font-size: 13px; line-height: 1.7; }
+  .result-answer.correct { background: #dcfce7; border-right: 4px solid #22c55e; }
+  .result-answer.partial { background: #fef3c7; border-right: 4px solid #f59e0b; }
+  .result-answer.wrong { background: #fee2e2; border-right: 4px solid #ef4444; }
+  .result-label { font-weight: bold; font-size: 12px; margin-bottom: 6px; }
   .model-answer {
-    margin-top: 10px; padding: 10px;
-    background: #eff6ff; border-radius: 8px;
-    font-size: 13px; line-height: 1.7;
-    color: #1e40af;
+    margin-top: 10px; padding: 10px; background: #eff6ff;
+    border-radius: 8px; font-size: 13px; line-height: 1.7; color: #1e40af;
   }
   
   .score-box {
-    text-align: center; padding: 25px;
-    background: #fff; border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    text-align: center; padding: 25px; background: #fff;
+    border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
     margin-bottom: 15px;
   }
-  
-  .score-big {
-    font-size: 52px; font-weight: bold;
-    margin: 12px 0;
-  }
+  .score-big { font-size: 52px; font-weight: bold; margin: 12px 0; }
   
   .submit-btn {
     width: 100%; padding: 15px;
@@ -245,21 +179,21 @@
   .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
   
   .back-btn {
-    width: 100%; padding: 12px;
-    background: #e2e8f0; color: #475569;
-    border: none; border-radius: 12px;
+    width: 100%; padding: 12px; background: #e2e8f0;
+    color: #475569; border: none; border-radius: 12px;
     font-size: 14px; font-weight: bold; cursor: pointer;
     font-family: inherit; margin-top: 10px;
   }
   
-  .empty {
-    text-align: center; padding: 45px 20px;
-    color: #94a3b8; font-size: 15px;
-  }
+  .empty { text-align: center; padding: 45px 20px; color: #94a3b8; font-size: 15px; }
+  .loading { text-align: center; padding: 30px; color: #94a3b8; font-size: 14px; }
   
-  .loading {
-    text-align: center; padding: 30px;
-    color: #94a3b8; font-size: 14px;
+  .warn-banner {
+    background: #fef3c7; color: #92400e;
+    padding: 12px; border-radius: 12px;
+    font-size: 13px; line-height: 1.7;
+    margin-bottom: 15px;
+    border-right: 4px solid #f59e0b;
   }
 </style>
 </head>
@@ -267,10 +201,7 @@
 
 <header>
   <div class="header-top">
-    <div class="logo-small">
-      <span>👥</span>
-      <span>التوأم</span>
-    </div>
+    <div class="logo-small"><span>👥</span><span>Twins</span></div>
     <div class="header-buttons">
       <a href="#" class="icon-btn support-btn-header" id="headerSupportBtn" target="_blank">💬</a>
       <button class="icon-btn" onclick="logout()">خروج</button>
@@ -293,11 +224,9 @@
   <div id="lessons" class="section active">
     <div id="lessonsList"><div class="loading">جاري التحميل...</div></div>
   </div>
-  
   <div id="exams" class="section">
     <div id="examsList"><div class="loading">جاري التحميل...</div></div>
   </div>
-  
   <div id="results" class="section">
     <div id="resultsList"></div>
   </div>
@@ -336,17 +265,12 @@
   const grade = localStorage.getItem('grade');
   const parentPhone = localStorage.getItem('parentPhone');
   
-  if (!studentId) {
-    window.location.href = 'index.html';
-  }
+  if (!studentId) window.location.href = 'index.html';
   
   document.getElementById('sid').textContent = studentId;
   document.getElementById('welcomeName').textContent = studentName;
   
-  const gradeMap = {
-    sec2: 'تانية بكالوريا',
-    sec3: 'تالتة ثانوي'
-  };
+  const gradeMap = { sec2: 'تانية بكالوريا', sec3: 'تالتة ثانوي' };
   document.getElementById('stype').textContent = gradeMap[grade] || '---';
   
   let completedLessons = JSON.parse(localStorage.getItem('completed_' + studentId) || '[]');
@@ -354,31 +278,28 @@
   
   let allLessons = [];
   let allExams = [];
+  let currentExam = null;
+  let examTimerInterval = null;
+  let examEndTime = null;
   
-  // ============ تحميل رقم الدعم ============
   async function loadSupportPhone() {
     try {
       const snap = await getDoc(doc(db, 'settings', 'support'));
       if (snap.exists() && snap.data().whatsapp) {
         const phone = snap.data().whatsapp;
         const btn = document.getElementById('headerSupportBtn');
-        btn.href = `https://wa.me/${phone}?text=${encodeURIComponent('مرحباً، عندي مشكلة في منصة التوأم')}`;
+        btn.href = `https://wa.me/${phone}?text=${encodeURIComponent('مرحباً، عندي مشكلة في منصة Twins')}`;
         btn.classList.add('show');
       }
-    } catch (err) {
-      console.log('لا يوجد رقم دعم');
-    }
+    } catch (err) {}
   }
-  
   loadSupportPhone();
   
-  // ============ التابات ============
   window.switchTab = function(tabId, el) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     el.classList.add('active');
     document.getElementById(tabId).classList.add('active');
-    
     if (tabId === 'results') renderResults();
   };
   
@@ -391,9 +312,7 @@
       snap.forEach(d => {
         const l = d.data();
         l.id = d.id;
-        if (l.grade === 'all' || l.grade === grade) {
-          allLessons.push(l);
-        }
+        if (l.grade === 'all' || l.grade === grade) allLessons.push(l);
       });
       
       if (allLessons.length === 0) {
@@ -424,16 +343,14 @@
   
   let currentLessonId = null;
   
-  window.openLesson = function(id) {
+  window.openLesson = async function(id) {
     const lesson = allLessons.find(l => l.id === id);
     if (!lesson) return;
     currentLessonId = id;
     
     document.getElementById('lessonTitle').textContent = lesson.title;
     document.getElementById('lessonDesc').textContent = lesson.desc || '';
-    
-    const video = document.getElementById('videoPlayer');
-    video.src = lesson.videoUrl;
+    document.getElementById('videoPlayer').src = lesson.videoUrl;
     
     const btn = document.getElementById('completeBtn');
     if (completedLessons.includes(id)) {
@@ -443,6 +360,17 @@
       btn.textContent = '✅ خلصت الدرس';
       btn.classList.remove('done');
     }
+    
+    try {
+      await setDoc(doc(db, 'students', studentId), {
+        watchedLessons: {
+          [id]: {
+            title: lesson.title,
+            watchedAt: new Date().toISOString()
+          }
+        }
+      }, { merge: true });
+    } catch (err) { console.error('خطأ في التسجيل:', err); }
     
     document.getElementById('playerOverlay').classList.add('active');
   };
@@ -472,9 +400,7 @@
       snap.forEach(d => {
         const e = d.data();
         e.id = d.id;
-        if (e.grade === 'all' || e.grade === grade) {
-          allExams.push(e);
-        }
+        if (e.grade === 'all' || e.grade === grade) allExams.push(e);
       });
       
       if (allExams.length === 0) {
@@ -485,15 +411,27 @@
       let html = '';
       allExams.forEach(e => {
         const res = examResults[e.id];
-        const qCount = e.questions ? e.questions.length : 0;
-        const total = e.totalPoints || 0;
+        const countA = e.modelA?.questions?.length || 0;
+        const countB = e.modelB?.questions?.length || 0;
+        const totalPoints = e.modelA?.totalPoints || 0;
+        const finished = !!res;
+        
+        let statusBadge = '';
+        if (finished) {
+          if (res.status === 'abandoned') statusBadge = '<span class="badge badge-red">❌ لم تُكمل</span>';
+          else statusBadge = `<span class="badge badge-green">نتيجتك: ${res.score}/${res.total}</span>`;
+        } else {
+          statusBadge = '<span class="badge badge-orange">لم يُحل</span>';
+        }
+        
         html += `
-          <div class="card" onclick="openExam('${e.id}')" style="border-right-color:#a855f7;">
+          <div class="card ${finished ? 'locked' : ''}" style="border-right-color:#a855f7;" onclick="${finished ? '' : `openExam('${e.id}')`}">
             <div class="card-title">${e.title}</div>
             <div class="card-meta">
-              <span class="badge badge-purple">${qCount} سؤال</span>
-              <span class="badge badge-blue">${total} درجة</span>
-              ${res ? `<span class="badge badge-green">نتيجتك: ${res.score}/${res.total}</span>` : '<span class="badge badge-orange">لم يُحل</span>'}
+              <span class="badge badge-purple">⏱️ ${e.duration} دقيقة</span>
+              <span class="badge badge-blue">${countA + countB} سؤال</span>
+              <span class="badge badge-blue">${totalPoints} درجة</span>
+              ${statusBadge}
             </div>
           </div>
         `;
@@ -504,46 +442,176 @@
     }
   }
   
-  let currentExam = null;
+  async function determineStudentModel(examId) {
+    const snap = await getDocs(collection(db, 'students'));
+    let countA = 0;
+    let countB = 0;
+    snap.forEach(d => {
+      const data = d.data();
+      const r = data.results && data.results[examId];
+      if (r && r.model) {
+        if (r.model === 'A') countA++;
+        else if (r.model === 'B') countB++;
+      }
+    });
+    return countA <= countB ? 'A' : 'B';
+  }
   
-  window.openExam = function(id) {
+  window.openExam = async function(id) {
     const exam = allExams.find(e => e.id === id);
     if (!exam) return;
-    currentExam = exam;
+    
+    const previousResult = examResults[id];
+    if (previousResult) {
+      alert('⚠️ إنت حلّيت الامتحان ده قبل كده — مينفعش تحله تاني');
+      return;
+    }
+    
+    const startedKey = 'exam_started_' + studentId + '_' + id;
+    const started = localStorage.getItem(startedKey);
+    
+    if (started) {
+      const startData = JSON.parse(started);
+      const now = Date.now();
+      const timeLeft = startData.endTime - now;
+      
+      if (timeLeft <= 0) {
+        await markExamAsAbandoned(id, exam, startData.model);
+        return;
+      }
+      
+      if (confirm('⚠️ إنت بدأت الامتحان قبل كده!\n\nلو خرجت، هيتم اعتباره لم يُكمل.\n\nعايز تكمل؟')) {
+        currentExam = exam;
+        examEndTime = startData.endTime;
+        renderExamUI(exam, startData.model, startData.answers || {});
+        startExamTimer();
+      } else {
+        await markExamAsAbandoned(id, exam, startData.model);
+      }
+      return;
+    }
+    
+    if (!confirm(`⚠️ تنبيه مهم!\n\n• الامتحان مدته ${exam.duration} دقيقة\n• لما تبدأ، مينفعش تخرج وترجع\n• لو خرجت، هيتم اعتباره لم يُكمل\n• المؤقت مش هيتوقف\n\nعايز تبدأ؟`)) {
+      return;
+    }
+    
+    try {
+      const model = await determineStudentModel(id);
+      const modelData = model === 'A' ? exam.modelA : exam.modelB;
+      
+      if (!modelData || !modelData.questions) {
+        alert('❌ الامتحان مش جاهز');
+        return;
+      }
+      
+      const endTime = Date.now() + (exam.duration * 60 * 1000);
+      
+      localStorage.setItem(startedKey, JSON.stringify({
+        model,
+        endTime,
+        answers: {}
+      }));
+      
+      currentExam = exam;
+      examEndTime = endTime;
+      
+      renderExamUI(exam, model, {});
+      startExamTimer();
+      
+    } catch (err) {
+      console.error(err);
+      alert('❌ خطأ: ' + err.message);
+    }
+  };
+  
+  function renderExamUI(exam, model, savedAnswers) {
+    const modelData = model === 'A' ? exam.modelA : exam.modelB;
+    const questions = modelData.questions || [];
     
     let html = `
       <div class="exam-header">
         <h2>${exam.title}</h2>
-        <p>${exam.questions.length} سؤال • ${exam.totalPoints} درجة • ${exam.duration || ''}</p>
+        <p>${questions.length} سؤال • ${modelData.totalPoints || 0} درجة</p>
+      </div>
+      
+      <div class="timer-bar" id="timerBar">
+        <span>⏱️ الوقت المتبقي:</span>
+        <span class="timer-time" id="timerDisplay">--:--</span>
+      </div>
+      
+      <div class="model-badge">📄 نموذجك: <b>${model}</b></div>
+      
+      <div class="warn-banner">
+        ⚠️ <b>تحذير:</b> متخرجش من الامتحان — الوقت مش بيتوقف، ومش هتقدر ترجع.
       </div>
     `;
     
-    if (exam.imageUrl) {
-      if (exam.imageType === 'pdf') {
-        html += `<iframe src="${exam.imageUrl}" style="width:100%; height:500px; border-radius:12px; border:2px solid #e2e8f0; margin-bottom:15px;"></iframe>`;
-      } else {
-        html += `<img src="${exam.imageUrl}" class="exam-image">`;
-      }
-    }
-    
-    html += '<p style="color:#7c3aed; font-weight:bold; margin-bottom:12px; font-size:14px;">✍️ اكتب إجابتك لكل سؤال:</p>';
-    
-    exam.questions.forEach((q, i) => {
+    questions.forEach((q, i) => {
+      const savedAnswer = savedAnswers[i] || '';
       html += `
-        <div class="question-box" id="qbox${i}">
+        <div class="question-box">
           <div class="q-number">سؤال ${i + 1} • ${q.points} درجة</div>
           <div class="q-text">${q.text}</div>
-          <textarea class="q-answer-input" id="ans${i}" placeholder="اكتب إجابتك هنا..."></textarea>
+          <textarea class="q-answer-input" id="ans${i}" placeholder="اكتب إجابتك هنا..." oninput="saveAnswerInput(${i})">${savedAnswer}</textarea>
         </div>
       `;
     });
     
     html += `<button class="submit-btn" id="submitExamBtn" onclick="submitExam()">📤 تسليم الامتحان</button>`;
-    html += `<button class="back-btn" onclick="loadExams()">رجوع</button>`;
     
     document.getElementById('examsList').innerHTML = html;
     window.scrollTo(0, 0);
+  }
+  
+  window.saveAnswerInput = function(qIndex) {
+    if (!currentExam) return;
+    const startedKey = 'exam_started_' + studentId + '_' + currentExam.id;
+    const startData = JSON.parse(localStorage.getItem(startedKey) || '{}');
+    
+    const modelData = startData.model === 'A' ? currentExam.modelA : currentExam.modelB;
+    const allAnswers = {};
+    modelData.questions.forEach((_, i) => {
+      const el = document.getElementById('ans' + i);
+      if (el) allAnswers[i] = el.value;
+    });
+    
+    startData.answers = allAnswers;
+    localStorage.setItem(startedKey, JSON.stringify(startData));
   };
+  
+  function startExamTimer() {
+    updateTimerDisplay();
+    if (examTimerInterval) clearInterval(examTimerInterval);
+    
+    examTimerInterval = setInterval(() => {
+      const timeLeft = examEndTime - Date.now();
+      
+      if (timeLeft <= 0) {
+        clearInterval(examTimerInterval);
+        autoSubmitExam();
+        return;
+      }
+      
+      updateTimerDisplay();
+    }, 1000);
+  }
+  
+  function updateTimerDisplay() {
+    const timeLeft = Math.max(0, examEndTime - Date.now());
+    const minutes = Math.floor(timeLeft / 60000);
+    const seconds = Math.floor((timeLeft % 60000) / 1000);
+    const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    const timerEl = document.getElementById('timerDisplay');
+    const barEl = document.getElementById('timerBar');
+    if (timerEl) timerEl.textContent = display;
+    
+    if (barEl) {
+      barEl.classList.remove('warning', 'danger');
+      if (timeLeft < 60 * 1000) barEl.classList.add('danger');
+      else if (timeLeft < 5 * 60 * 1000) barEl.classList.add('warning');
+    }
+  }
   
   function normalizeText(text) {
     return text
@@ -559,14 +627,12 @@
     if (!studentAnswer || keywords.length === 0) {
       return { matched: 0, total: keywords.length, percent: 0 };
     }
-    
     const normalized = normalizeText(studentAnswer);
     let matched = 0;
     keywords.forEach(kw => {
       const kwNorm = normalizeText(kw);
       if (kwNorm && normalized.includes(kwNorm)) matched++;
     });
-    
     return {
       matched,
       total: keywords.length,
@@ -574,29 +640,41 @@
     };
   }
   
-  window.submitExam = function() {
+  window.submitExam = async function() {
     if (!currentExam) return;
-    
     const btn = document.getElementById('submitExamBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ جاري التصحيح...';
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ جاري التصحيح...'; }
+    await finishExam(false);
+  };
+  
+  async function autoSubmitExam() {
+    alert('⏰ انتهى وقت الامتحان! هيتم التسليم تلقائياً.');
+    await finishExam(false);
+  }
+  
+  async function finishExam(abandoned) {
+    if (examTimerInterval) clearInterval(examTimerInterval);
+    
+    const startedKey = 'exam_started_' + studentId + '_' + currentExam.id;
+    const startData = JSON.parse(localStorage.getItem(startedKey) || '{}');
+    const model = startData.model;
+    const modelData = model === 'A' ? currentExam.modelA : currentExam.modelB;
+    const questions = modelData.questions || [];
     
     let earned = 0;
     let total = 0;
     const details = [];
     
-    currentExam.questions.forEach((q, i) => {
-      const studentAns = document.getElementById('ans' + i).value.trim();
+    questions.forEach((q, i) => {
+      const ansEl = document.getElementById('ans' + i);
+      const studentAns = ansEl ? ansEl.value.trim() : (startData.answers?.[i] || '');
       const result = checkAnswer(studentAns, q.keywords || []);
       
       total += q.points;
       
       let pointsEarned = 0;
-      if (result.percent >= 70) {
-        pointsEarned = q.points;
-      } else if (result.percent >= 40) {
-        pointsEarned = Math.round(q.points * (result.percent / 100) * 10) / 10;
-      }
+      if (result.percent >= 70) pointsEarned = q.points;
+      else if (result.percent >= 40) pointsEarned = Math.round(q.points * (result.percent / 100) * 10) / 10;
       
       earned += pointsEarned;
       
@@ -613,39 +691,72 @@
       });
     });
     
-    examResults[currentExam.id] = {
+    const finalResult = {
       score: earned,
       total,
       percent: Math.round((earned / total) * 100),
       date: new Date().toISOString(),
+      model,
+      status: abandoned ? 'abandoned' : 'completed',
       details
+    };
+    
+    examResults[currentExam.id] = finalResult;
+    localStorage.setItem('exams_' + studentId, JSON.stringify(examResults));
+    localStorage.removeItem(startedKey);
+    
+    try {
+      await setDoc(doc(db, 'students', studentId), {
+        results: {
+          [currentExam.id]: {
+            score: finalResult.score,
+            total: finalResult.total,
+            percent: finalResult.percent,
+            date: finalResult.date,
+            model: finalResult.model,
+            status: finalResult.status,
+            examTitle: currentExam.title
+          }
+        }
+      }, { merge: true });
+    } catch (err) { console.error(err); }
+    
+    renderExamResult(currentExam, finalResult);
+  }
+  
+  async function markExamAsAbandoned(examId, exam, model) {
+    const startedKey = 'exam_started_' + studentId + '_' + examId;
+    localStorage.removeItem(startedKey);
+    
+    try {
+      await setDoc(doc(db, 'students', studentId), {
+        results: {
+          [examId]: {
+            score: 0,
+            total: exam.modelA?.totalPoints || 0,
+            percent: 0,
+            date: new Date().toISOString(),
+            model: model || 'A',
+            status: 'abandoned',
+            examTitle: exam.title
+          }
+        }
+      }, { merge: true });
+    } catch (err) { console.error(err); }
+    
+    examResults[examId] = {
+      score: 0,
+      total: exam.modelA?.totalPoints || 0,
+      percent: 0,
+      date: new Date().toISOString(),
+      model: model || 'A',
+      status: 'abandoned',
+      details: []
     };
     localStorage.setItem('exams_' + studentId, JSON.stringify(examResults));
     
-    saveResultToFirebase(currentExam.id, examResults[currentExam.id]);
-    
-    renderExamResult(currentExam, examResults[currentExam.id]);
-  };
-  
-  async function saveResultToFirebase(examId, result) {
-    try {
-      const studentRef = doc(db, 'students', studentId);
-      const snap = await getDoc(studentRef);
-      if (snap.exists()) {
-        const data = snap.data();
-        const results = data.results || {};
-        results[examId] = {
-          score: result.score,
-          total: result.total,
-          percent: result.percent,
-          date: result.date,
-          examTitle: currentExam.title
-        };
-        await setDoc(studentRef, { results }, { merge: true });
-      }
-    } catch (err) {
-      console.error('خطأ في حفظ النتيجة:', err);
-    }
+    alert('❌ تم اعتبار الامتحان لم يُكمل — لا يمكن إعادة المحاولة');
+    loadExams();
   }
   
   function renderExamResult(exam, result) {
@@ -660,6 +771,7 @@
         <h2 style="color:#1e3a8a; margin:8px 0;">${msg}</h2>
         <div class="score-big" style="color:${color};">${result.score} / ${result.total}</div>
         <p style="color:#64748b; font-size:14px;">النسبة: ${percent}%</p>
+        <span class="model-badge" style="margin-top:12px;">📄 نموذج ${result.model}</span>
       </div>
       
       <h3 style="color:#7c3aed; font-size:15px; margin:15px 0;">📋 تفاصيل الإجابات:</h3>
@@ -670,34 +782,21 @@
       let statusLabel = '❌ إجابة غير صحيحة';
       let statusColor = '#ef4444';
       
-      if (d.percent >= 70) {
-        statusClass = 'correct';
-        statusLabel = '✅ إجابة صحيحة';
-        statusColor = '#166534';
-      } else if (d.percent >= 40) {
-        statusClass = 'partial';
-        statusLabel = '⚠️ إجابة ناقصة';
-        statusColor = '#92400e';
-      }
+      if (d.percent >= 70) { statusClass = 'correct'; statusLabel = '✅ إجابة صحيحة'; statusColor = '#166534'; }
+      else if (d.percent >= 40) { statusClass = 'partial'; statusLabel = '⚠️ إجابة ناقصة'; statusColor = '#92400e'; }
       
       html += `
         <div class="question-box">
           <div class="q-number">سؤال ${i + 1}</div>
           <div class="q-text">${d.question}</div>
-          
           <div class="result-answer ${statusClass}">
             <div class="result-label" style="color:${statusColor};">${statusLabel}</div>
             <div><b>إجابتك:</b> ${d.studentAnswer || '<i>لم تُجب</i>'}</div>
             <div style="margin-top:6px; font-size:12px;">
-              الكلمات المفتاحية اللي جبتها: <b>${d.matched}</b> من <b>${d.keywordsCount}</b>
-              • الدرجة: <b>${d.pointsEarned} / ${d.points}</b>
+              الكلمات: <b>${d.matched}</b> من <b>${d.keywordsCount}</b> • الدرجة: <b>${d.pointsEarned} / ${d.points}</b>
             </div>
           </div>
-          
-          <div class="model-answer">
-            <b>📖 الإجابة النموذجية:</b><br>
-            ${d.modelAnswer}
-          </div>
+          <div class="model-answer"><b>📖 الإجابة النموذجية:</b><br>${d.modelAnswer}</div>
         </div>
       `;
     });
@@ -708,7 +807,6 @@
     window.scrollTo(0, 0);
   }
   
-  // ============ النتائج ============
   function renderResults() {
     const list = document.getElementById('resultsList');
     const keys = Object.keys(examResults);
@@ -724,21 +822,28 @@
       const color = r.percent >= 50 ? '#22c55e' : '#ef4444';
       const exam = allExams.find(e => e.id === k);
       const title = exam ? exam.title : 'امتحان محذوف';
+      const statusLabel = r.status === 'abandoned' ? ' <span class="badge badge-red">لم يُكمل</span>' : '';
+      const modelLabel = r.model ? `<span class="badge badge-purple">نموذج ${r.model}</span>` : '';
       
       html += `
         <div class="card" style="cursor:default; border-right-color:${color};">
-          <div class="card-title">${title}</div>
+          <div class="card-title">${title}${statusLabel}</div>
           <div class="card-meta">
             <span class="badge" style="background:${color}22; color:${color};">
               النتيجة: ${r.score} / ${r.total} (${r.percent}%)
             </span>
+            ${modelLabel}
             <span class="badge badge-blue">📅 ${new Date(r.date).toLocaleDateString('ar-EG')}</span>
           </div>
         </div>
       `;
     });
     
-    const avg = Math.round(keys.reduce((s, k) => s + examResults[k].percent, 0) / keys.length);
+    const validResults = keys.filter(k => examResults[k].status !== 'abandoned');
+    const avg = validResults.length > 0
+      ? Math.round(validResults.reduce((s, k) => s + examResults[k].percent, 0) / validResults.length)
+      : 0;
+    
     html = `
       <div class="score-box" style="margin-bottom:15px;">
         <div style="font-size:44px;">📊</div>
@@ -750,15 +855,36 @@
     list.innerHTML = html;
   }
   
-  // ============ خروج ============
   window.logout = function() {
+    const activeExam = allExams.find(e => {
+      const startedKey = 'exam_started_' + studentId + '_' + e.id;
+      return localStorage.getItem(startedKey);
+    });
+    
+    if (activeExam) {
+      if (!confirm('⚠️ فيه امتحان شغال!\n\nلو خرجت، هيتم اعتباره لم يُكمل.\n\nمتأكد؟')) return;
+      const startedKey = 'exam_started_' + studentId + '_' + activeExam.id;
+      const startData = JSON.parse(localStorage.getItem(startedKey) || '{}');
+      markExamAsAbandoned(activeExam.id, activeExam, startData.model);
+    }
+    
     if (confirm('متأكد إنك عايز تخرج؟')) {
       localStorage.clear();
       window.location.href = 'index.html';
     }
   };
   
-  // ============ تشغيل ============
+  window.addEventListener('beforeunload', (e) => {
+    const activeExam = allExams.find(ex => {
+      const startedKey = 'exam_started_' + studentId + '_' + ex.id;
+      return localStorage.getItem(startedKey);
+    });
+    if (activeExam) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+  
   loadLessons();
   loadExams();
 </script>

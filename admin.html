@@ -3,130 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة المالك - التوأم</title>
+<title>لوحة المالك - Twins</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
   body { background: #f1f5f9; min-height: 100vh; padding: 15px; }
   .container { max-width: 620px; margin: 0 auto; }
-  
-  .header {
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
-    color: #fff; padding: 20px; border-radius: 20px;
-    text-align: center; margin-bottom: 18px;
-    box-shadow: 0 10px 30px rgba(124,58,237,0.3);
-  }
+  .header { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; padding: 20px; border-radius: 20px; text-align: center; margin-bottom: 18px; }
   .header h1 { font-size: 22px; margin-bottom: 5px; }
   .header p { font-size: 13px; opacity: 0.9; }
-  
-  .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
-  .tab {
-    flex: 1; padding: 12px 8px; background: #fff; border: none;
-    border-radius: 12px; font-weight: bold; color: #64748b;
-    cursor: pointer; font-family: inherit; font-size: 13px;
-    transition: 0.3s;
-  }
+  .tabs { display: flex; gap: 6px; margin-bottom: 18px; overflow-x: auto; }
+  .tab { flex: 1; min-width: 70px; padding: 10px 6px; background: #fff; border: none; border-radius: 12px; font-weight: bold; color: #64748b; cursor: pointer; font-family: inherit; font-size: 12px; }
   .tab.active { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; }
-  
-  .card {
-    background: #fff; border-radius: 16px; padding: 20px;
-    margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-  }
-  
+  .card { background: #fff; border-radius: 16px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
   .field { margin-bottom: 14px; }
   label { display: block; color: #334155; font-size: 13px; font-weight: bold; margin-bottom: 6px; }
-  
-  input, select, textarea {
-    width: 100%; padding: 12px; border: 2px solid #e2e8f0;
-    border-radius: 10px; font-size: 14px; background: #f8fafc; font-family: inherit;
-    color: #1e293b;
-  }
+  input, select, textarea { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; background: #f8fafc; font-family: inherit; color: #1e293b; }
   textarea { min-height: 65px; resize: vertical; }
-  
-  input:focus, select:focus, textarea:focus {
-    outline: none; border-color: #a855f7; background: #fff;
-    box-shadow: 0 0 0 4px rgba(168,85,247,0.1);
-  }
-  
-  .file-picker {
-    display: block; width: 100%;
-    padding: 22px 15px; border: 2px dashed #a855f7;
-    border-radius: 12px; background: #faf5ff;
-    text-align: center; cursor: pointer;
-    transition: 0.3s;
-  }
-  .file-picker:hover { background: #f3e8ff; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #a855f7; background: #fff; }
+  .file-picker { display: block; width: 100%; padding: 22px 15px; border: 2px dashed #a855f7; border-radius: 12px; background: #faf5ff; text-align: center; cursor: pointer; }
   .file-picker input { display: none; }
   .file-picker .icon { font-size: 38px; margin-bottom: 8px; }
   .file-picker .text { color: #7c3aed; font-weight: bold; font-size: 14px; }
   .file-picker .subtext { color: #94a3b8; font-size: 11px; margin-top: 4px; }
-  
   .file-name { color: #166534; font-size: 13px; margin-top: 10px; text-align: center; font-weight: bold; }
-  
-  .progress-bar {
-    width: 100%; height: 10px; background: #e2e8f0;
-    border-radius: 5px; margin-top: 12px; overflow: hidden; display: none;
-  }
+  .progress-bar { width: 100%; height: 10px; background: #e2e8f0; border-radius: 5px; margin-top: 12px; overflow: hidden; display: none; }
   .progress-bar.active { display: block; }
-  .progress-fill {
-    height: 100%; width: 0%;
-    background: linear-gradient(90deg, #7c3aed, #a855f7);
-    transition: width 0.3s;
-  }
-  
-  .btn {
-    width: 100%; padding: 14px;
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
-    color: #fff; border: none; border-radius: 12px;
-    font-size: 15px; font-weight: bold; cursor: pointer;
-    font-family: inherit; margin-top: 10px;
-    transition: 0.3s;
-  }
-  .btn:hover { transform: translateY(-2px); }
-  .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #7c3aed, #a855f7); transition: width 0.3s; }
+  .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: bold; cursor: pointer; font-family: inherit; margin-top: 10px; }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
   .btn-blue { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
   .btn-green { background: linear-gradient(135deg, #16a34a, #22c55e); }
-  
-  .msg {
-    padding: 12px; border-radius: 10px; text-align: center;
-    margin-top: 12px; display: none; font-size: 14px;
-  }
+  .msg { padding: 12px; border-radius: 10px; text-align: center; margin-top: 12px; display: none; font-size: 14px; }
   .msg.error { background: #fee2e2; color: #991b1b; display: block; }
   .msg.success { background: #dcfce7; color: #166534; display: block; }
   .msg.info { background: #dbeafe; color: #1e40af; display: block; }
-  
-  .item {
-    background: #f8fafc; padding: 12px; border-radius: 10px;
-    margin-bottom: 10px; display: flex; justify-content: space-between;
-    align-items: center; gap: 10px; border-right: 4px solid #a855f7;
-  }
+  .item { background: #f8fafc; padding: 12px; border-radius: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; border-right: 4px solid #a855f7; }
   .item-info { flex: 1; }
   .item-title { font-weight: bold; color: #1e293b; font-size: 14px; margin-bottom: 3px; }
   .item-meta { font-size: 12px; color: #64748b; }
-  .del-btn {
-    background: #ef4444; color: #fff; border: none;
-    padding: 8px 12px; border-radius: 8px;
-    cursor: pointer; font-family: inherit; font-size: 13px;
-  }
-  
-  .question-card {
-    background: #faf5ff; border: 2px dashed #c084fc;
-    padding: 15px; border-radius: 14px; margin-bottom: 14px;
-  }
-  
-  .empty {
-    text-align: center; color: #94a3b8; padding: 30px;
-    font-size: 14px;
-  }
-  
-  .hint {
-    background: #fef3c7; color: #92400e; font-size: 12px;
-    padding: 10px; border-radius: 8px; margin-bottom: 15px;
-    line-height: 1.6;
-  }
-  
-  .settings-icon {
-    text-align: center; font-size: 60px; margin-bottom: 15px;
-  }
+  .del-btn { background: #ef4444; color: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 13px; }
+  .question-card { background: #faf5ff; border: 2px dashed #c084fc; padding: 15px; border-radius: 14px; margin-bottom: 14px; }
+  .empty { text-align: center; color: #94a3b8; padding: 30px; font-size: 14px; }
+  .hint { background: #fef3c7; color: #92400e; font-size: 12px; padding: 10px; border-radius: 8px; margin-bottom: 15px; line-height: 1.6; }
+  .settings-icon { text-align: center; font-size: 60px; margin-bottom: 15px; }
+  .type-buttons { display: flex; gap: 8px; margin-bottom: 15px; }
+  .type-btn { flex: 1; padding: 12px 8px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 13px; font-family: inherit; font-weight: bold; color: #64748b; cursor: pointer; }
+  .type-btn.active { background: linear-gradient(135deg, #dbeafe, #eff6ff); border-color: #3b82f6; color: #1e40af; }
+  .type-btn.active.weekly { background: linear-gradient(135deg, #fef3c7, #fffbeb); border-color: #f59e0b; color: #92400e; }
+  .model-tab { flex: 1; padding: 12px; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-weight: bold; color: #64748b; cursor: pointer; font-size: 14px; }
+  .model-tab.active { background: linear-gradient(135deg, #7c3aed, #a855f7); color: #fff; border-color: transparent; }
 </style>
 </head>
 <body>
@@ -134,7 +59,7 @@
 <div class="container">
   <div class="header">
     <h1>👑 لوحة المالك</h1>
-    <p>إدارة منصة التوأم</p>
+    <p>إدارة منصة Twins</p>
   </div>
   
   <div id="loginScreen" class="card">
@@ -151,24 +76,23 @@
     <div class="tabs">
       <button class="tab active" onclick="switchTab('lessonsTab', this)">📚 الحصص</button>
       <button class="tab" onclick="switchTab('examsTab', this)">📝 الامتحانات</button>
-      <button class="tab" onclick="switchTab('settingsTab', this)">⚙️ الإعدادات</button>
+      <button class="tab" onclick="switchTab('ratingsTab', this)">✅ التقييمات</button>
+      <button class="tab" onclick="switchTab('resultsTab', this)">📊 النتائج</button>
+      <button class="tab" onclick="switchTab('settingsTab', this)">⚙️</button>
     </div>
     
-    <!-- ============ قسم الحصص ============ -->
+    <!-- الحصص -->
     <div id="lessonsTab">
       <div class="card">
         <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">➕ إضافة درس جديد</h3>
-        
         <div class="field">
           <label>عنوان الدرس</label>
           <input type="text" id="lessonTitle" placeholder="مثال: الدرس الأول - الجبر">
         </div>
-        
         <div class="field">
           <label>الوصف</label>
           <textarea id="lessonDesc" placeholder="وصف مختصر للدرس"></textarea>
         </div>
-        
         <div class="field">
           <label>الفيديو (من الجاليري)</label>
           <label class="file-picker" for="lessonVideoFile">
@@ -182,131 +106,135 @@
             <div class="progress-fill" id="progressFill"></div>
           </div>
         </div>
-        
         <div class="field">
           <label>المرحلة</label>
           <select id="lessonGrade">
             <option value="all">كل المراحل</option>
             <option value="sec2">تانية بكالوريا</option>
-            <option value="sec3">تالتة بكالوريا</option>
+            <option value="sec3">تالتة ثانوي</option>
           </select>
         </div>
-        
         <div class="field">
           <label>المدة</label>
           <input type="text" id="lessonDuration" placeholder="مثال: 20 دقيقة">
         </div>
-        
         <button class="btn" id="saveLessonBtn" onclick="addLesson()">💾 حفظ الدرس</button>
         <div class="msg" id="lessonMsg"></div>
       </div>
-      
       <div class="card">
         <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">📋 الحصص المنشورة</h3>
         <div id="lessonsList"></div>
       </div>
     </div>
     
-    <!-- ============ قسم الامتحانات ============ -->
+    <!-- الامتحانات -->
     <div id="examsTab" style="display:none;">
       <div class="card">
-        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">➕ إضافة امتحان</h3>
-        
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">➕ إضافة امتحان (نموذجين)</h3>
         <div class="hint">
-          💡 <b>طريقة العمل:</b><br>
-          1. اختار صورة ورقة الامتحان (اختياري)<br>
-          2. أضف الأسئلة + الإجابة النموذجية + الكلمات المفتاحية<br>
-          3. المنصة هتصحح إجابات الطالب تلقائياً
+          💡 <b>نظام النموذجين:</b><br>
+          • اكتب أسئلة نموذج A وأسئلة نموذج B<br>
+          • النظام هيوزع الطلاب تلقائياً بالتساوي<br>
+          • <b>لازم كل نموذج يكون فيه نفس عدد الأسئلة</b>
         </div>
-        
         <div class="field">
           <label>عنوان الامتحان</label>
           <input type="text" id="examTitle" placeholder="مثال: امتحان الوحدة الأولى">
         </div>
-        
+        <div class="field">
+          <label>المدة (بالدقائق)</label>
+          <input type="number" id="examDuration" value="40" min="5">
+        </div>
         <div class="field">
           <label>المرحلة</label>
           <select id="examGrade">
             <option value="all">كل المراحل</option>
             <option value="sec2">تانية بكالوريا</option>
-            <option value="sec3">تالتة بكالوريا</option>
+            <option value="sec3">تالتة ثانوي</option>
           </select>
         </div>
-        
-        <div class="field">
-          <label>المدة (اختياري)</label>
-          <input type="text" id="examDuration" placeholder="مثال: ساعة">
+        <hr style="margin:20px 0; border:none; border-top:2px dashed #c084fc;">
+        <div style="display:flex; gap:8px; margin-bottom:15px;">
+          <button type="button" class="model-tab active" id="tabA" onclick="switchModel('A')">📘 نموذج A</button>
+          <button type="button" class="model-tab" id="tabB" onclick="switchModel('B')">📗 نموذج B</button>
         </div>
-        
-        <div class="field">
-          <label>صورة ورقة الامتحان (اختياري)</label>
-          <label class="file-picker" for="examImageFile">
-            <div class="icon">📝</div>
-            <div class="text">اضغط لاختيار صورة الامتحان</div>
-            <div class="subtext">JPG, PNG, PDF</div>
-            <input type="file" id="examImageFile" accept="image/*,application/pdf" onchange="onExamFileSelected(event)">
-          </label>
-          <div class="file-name" id="examFileName"></div>
-          <div class="progress-bar" id="examProgressBar">
-            <div class="progress-fill" id="examProgressFill"></div>
-          </div>
+        <div id="modelA-wrapper">
+          <div id="modelA-questions"></div>
+          <button type="button" class="btn btn-blue" onclick="addQuestion('A')">➕ إضافة سؤال للنموذج A</button>
         </div>
-        
-        <hr style="margin:22px 0; border:none; border-top:2px dashed #c084fc;">
-        
-        <h4 style="color:#7c3aed; margin-bottom:8px; font-size:15px;">📝 الأسئلة ونموذج الإجابة</h4>
-        <p style="color:#64748b; font-size:12px; margin-bottom:15px; line-height:1.6;">
-          لكل سؤال، اكتب:<br>
-          • نص السؤال<br>
-          • الإجابة النموذجية<br>
-          • الكلمات المفتاحية (افصل بينها بفاصلة)
-        </p>
-        
-        <div id="questionsArea"></div>
-        
-        <button class="btn btn-blue" onclick="addQuestionField()">➕ إضافة سؤال</button>
+        <div id="modelB-wrapper" style="display:none;">
+          <div id="modelB-questions"></div>
+          <button type="button" class="btn btn-blue" onclick="addQuestion('B')">➕ إضافة سؤال للنموذج B</button>
+        </div>
+        <hr style="margin:20px 0; border:none; border-top:2px dashed #c084fc;">
         <button class="btn" id="saveExamBtn" onclick="saveExam()">💾 حفظ الامتحان</button>
         <div class="msg" id="examMsg"></div>
       </div>
-      
       <div class="card">
         <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">📋 الامتحانات المنشورة</h3>
         <div id="examsList"></div>
       </div>
     </div>
     
-    <!-- ============ قسم الإعدادات ============ -->
+    <!-- التقييمات -->
+    <div id="ratingsTab" style="display:none;">
+      <div class="card">
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">✅ إضافة تقييم</h3>
+        <div class="field">
+          <label>اختار الطالب</label>
+          <select id="ratingStudent"><option value="">جاري التحميل...</option></select>
+        </div>
+        <div class="field">
+          <label>نوع التقييم</label>
+          <div class="type-buttons">
+            <button type="button" class="type-btn active" id="btnDaily" onclick="selectRatingType('daily')">📖 تسميع يومي</button>
+            <button type="button" class="type-btn weekly" id="btnWeekly" onclick="selectRatingType('weekly')">⭐ تقييم أسبوعي</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>الدرجة (من 10)</label>
+          <input type="number" id="ratingScore" min="0" max="10" placeholder="مثال: 8">
+        </div>
+        <div class="field">
+          <label>ملاحظات (اختياري)</label>
+          <input type="text" id="ratingNote" placeholder="مثال: ممتاز في الحفظ">
+        </div>
+        <button class="btn btn-green" id="saveRatingBtn" onclick="saveRating()">💾 حفظ التقييم</button>
+        <div class="msg" id="ratingMsg"></div>
+      </div>
+      <div class="card">
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">📋 آخر التقييمات</h3>
+        <div id="ratingsList"></div>
+      </div>
+    </div>
+    
+    <!-- النتائج -->
+    <div id="resultsTab" style="display:none;">
+      <div class="card">
+        <h3 style="color:#7c3aed; margin-bottom:15px; font-size:16px;">📊 نتائج الطلاب</h3>
+        <p style="color:#64748b; font-size:13px; margin-bottom:15px;">اضغط على أي طالب عشان تشوف تقريره</p>
+        <div id="studentsList"></div>
+      </div>
+    </div>
+    
+    <!-- الإعدادات -->
     <div id="settingsTab" style="display:none;">
       <div class="card">
         <div class="settings-icon">⚙️</div>
         <h3 style="color:#7c3aed; margin-bottom:8px; font-size:17px; text-align:center;">إعدادات المنصة</h3>
-        <p style="color:#64748b; font-size:13px; text-align:center; margin-bottom:20px;">
-          البيانات دي بتظهر للطلاب في المنصة
-        </p>
-        
         <div class="hint">
-          💡 <b>مهم:</b> اكتب رقم الواتساب بالصيغة الدولية<br>
+          💡 اكتب رقم واتساب الدعم بالصيغة الدولية<br>
           (بدون + وبدون 0 في الأول)<br>
-          <b>مثال:</b> لو رقمك <code>01220217671</code><br>
-          اكتبه: <code>201220217671</code>
+          <b>مثال:</b> <code>201220217671</code>
         </div>
-        
         <div class="field">
           <label>📱 رقم واتساب الدعم الفني</label>
           <input type="tel" id="supportPhone" placeholder="مثال: 201220217671">
         </div>
-        
         <button class="btn btn-green" id="saveSettingsBtn" onclick="saveSettings()">💾 حفظ الإعدادات</button>
         <div class="msg" id="settingsMsg"></div>
-        
-        <div style="margin-top:20px; padding:15px; background:#f0fdf4; border-radius:12px; border-right:4px solid #22c55e;">
-          <p style="color:#166534; font-size:13px; line-height:1.7;">
-            ✅ لما تحفظ الرقم ده، هيظهر للطلاب في صفحة الدخول كلينك "تواصل مع الدعم الفني على واتساب"
-          </p>
-        </div>
       </div>
     </div>
-    
   </div>
 </div>
 
@@ -323,19 +251,19 @@
     appId: "1:728148068456:web:edc9628e10b27d8eef53dd"
   };
   
-  const CLOUDINARY_CLOUD_NAME = "ضع_هنا_cloud_name";
-  const CLOUDINARY_UPLOAD_PRESET = "ضع_هنا_preset_name";
-  
+  const CLOUDINARY_CLOUD_NAME = "bwg4ixf0";
+  const CLOUDINARY_UPLOAD_PRESET = "twins_upload";
   const ADMIN_PASSWORD = "TWIN2025ADMIN";
   
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
   
   let selectedVideoFile = null;
-  let selectedExamFile = null;
-  let questionCount = 0;
+  let questionCountA = 0;
+  let questionCountB = 0;
+  let selectedRatingType = 'daily';
+  let allStudentsData = [];
   
-  // ============ تسجيل الدخول ============
   window.adminLogin = function() {
     const pass = document.getElementById('adminPass').value;
     const msg = document.getElementById('loginMsg');
@@ -358,77 +286,54 @@
     loadExams();
   }
   
-  // ============ التابات ============
   window.switchTab = function(id, el) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
-    document.getElementById('lessonsTab').style.display = 'none';
-    document.getElementById('examsTab').style.display = 'none';
-    document.getElementById('settingsTab').style.display = 'none';
+    ['lessonsTab','examsTab','ratingsTab','resultsTab','settingsTab'].forEach(t => {
+      document.getElementById(t).style.display = 'none';
+    });
     document.getElementById(id).style.display = 'block';
     if (id === 'settingsTab') loadSettings();
+    if (id === 'resultsTab') loadStudents();
+    if (id === 'ratingsTab') { loadStudentsDropdown(); loadRatingsList(); }
   };
   
-  // ============ اختيار الملفات ============
   window.onVideoSelected = function(e) {
     const file = e.target.files[0];
     if (!file) return;
     selectedVideoFile = file;
-    document.getElementById('fileName').textContent = 
-      `✅ ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} ميجا)`;
+    document.getElementById('fileName').textContent = `✅ ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} ميجا)`;
   };
   
-  window.onExamFileSelected = function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    selectedExamFile = file;
-    document.getElementById('examFileName').textContent = 
-      `✅ ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} ميجا)`;
-  };
-  
-  function uploadToCloudinary(file, folder, progressEl, progressBarEl, msgEl) {
+  function uploadToCloudinary(file, folder, progressEl, msgEl) {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
     formData.append('folder', folder);
-    
     const isVideo = file.type.startsWith('video');
     const resourceType = isVideo ? 'video' : 'auto';
     const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
-    
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url);
-      
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {
           const percent = Math.round((e.loaded / e.total) * 100);
           if (progressEl) progressEl.style.width = percent + '%';
-          if (msgEl) {
-            msgEl.textContent = `⬆️ جاري الرفع... ${percent}%`;
-            msgEl.className = 'msg info';
-          }
+          if (msgEl) { msgEl.textContent = `⬆️ جاري الرفع... ${percent}%`; msgEl.className = 'msg info'; }
         }
       };
-      
       xhr.onload = () => {
         if (xhr.status === 200) {
           const res = JSON.parse(xhr.responseText);
-          resolve({
-            url: res.secure_url,
-            type: isVideo ? 'video' : (file.type.includes('pdf') ? 'pdf' : 'image')
-          });
-        } else {
-          reject(new Error('فشل الرفع: ' + xhr.status));
-        }
+          resolve({ url: res.secure_url, type: isVideo ? 'video' : (file.type.includes('pdf') ? 'pdf' : 'image') });
+        } else reject(new Error('فشل الرفع: ' + xhr.status));
       };
-      
       xhr.onerror = () => reject(new Error('خطأ في الشبكة'));
       xhr.send(formData);
     });
   }
   
-  // ============ إضافة درس ============
   window.addLesson = async function() {
     const title = document.getElementById('lessonTitle').value.trim();
     const desc = document.getElementById('lessonDesc').value.trim();
@@ -436,18 +341,8 @@
     const duration = document.getElementById('lessonDuration').value.trim() || '—';
     const msg = document.getElementById('lessonMsg');
     const btn = document.getElementById('saveLessonBtn');
-    
-    if (!title) {
-      msg.textContent = '⚠️ اكتب عنوان الدرس';
-      msg.className = 'msg error';
-      return;
-    }
-    
-    if (!selectedVideoFile) {
-      msg.textContent = '⚠️ اختر فيديو من الجاليري';
-      msg.className = 'msg error';
-      return;
-    }
+    if (!title) { msg.textContent = '⚠️ اكتب عنوان الدرس'; msg.className = 'msg error'; return; }
+    if (!selectedVideoFile) { msg.textContent = '⚠️ اختر فيديو'; msg.className = 'msg error'; return; }
     
     btn.disabled = true;
     btn.textContent = '⏳ جاري الرفع...';
@@ -455,25 +350,13 @@
     document.getElementById('progressFill').style.width = '0%';
     
     try {
-      const result = await uploadToCloudinary(
-        selectedVideoFile, 'twin_lessons',
-        document.getElementById('progressFill'),
-        document.getElementById('progressBar'),
-        msg
-      );
-      
-      msg.textContent = '💾 جاري حفظ الدرس...';
+      const result = await uploadToCloudinary(selectedVideoFile, 'twin_lessons',
+        document.getElementById('progressFill'), msg);
+      msg.textContent = '💾 جاري الحفظ...';
       msg.className = 'msg info';
-      
-      await addDoc(collection(db, 'lessons'), {
-        title, desc, grade, duration,
-        videoUrl: result.url,
-        createdAt: new Date().toISOString()
-      });
-      
+      await addDoc(collection(db, 'lessons'), { title, desc, grade, duration, videoUrl: result.url, createdAt: new Date().toISOString() });
       msg.textContent = '✅ تم حفظ الدرس بنجاح';
       msg.className = 'msg success';
-      
       document.getElementById('lessonTitle').value = '';
       document.getElementById('lessonDesc').value = '';
       document.getElementById('lessonDuration').value = '';
@@ -481,11 +364,8 @@
       document.getElementById('fileName').textContent = '';
       document.getElementById('progressBar').classList.remove('active');
       selectedVideoFile = null;
-      
       loadLessons();
-      
     } catch (err) {
-      console.error(err);
       msg.textContent = '❌ ' + err.message;
       msg.className = 'msg error';
     } finally {
@@ -499,27 +379,14 @@
     list.innerHTML = '<div class="empty">جاري التحميل...</div>';
     try {
       const snap = await getDocs(collection(db, 'lessons'));
-      if (snap.empty) {
-        list.innerHTML = '<div class="empty">لا توجد حصص بعد 📭</div>';
-        return;
-      }
+      if (snap.empty) { list.innerHTML = '<div class="empty">لا توجد حصص بعد 📭</div>'; return; }
       let html = '';
       snap.forEach(d => {
         const l = d.data();
-        html += `
-          <div class="item">
-            <div class="item-info">
-              <div class="item-title">${l.title}</div>
-              <div class="item-meta">${l.grade} • ${l.duration}</div>
-            </div>
-            <button class="del-btn" onclick="deleteLesson('${d.id}')">🗑️</button>
-          </div>
-        `;
+        html += `<div class="item"><div class="item-info"><div class="item-title">${l.title}</div><div class="item-meta">${l.grade} • ${l.duration}</div></div><button class="del-btn" onclick="deleteLesson('${d.id}')">🗑️</button></div>`;
       });
       list.innerHTML = html;
-    } catch (err) {
-      list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>';
-    }
+    } catch (err) { list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>'; }
   }
   
   window.deleteLesson = async function(id) {
@@ -528,32 +395,37 @@
     loadLessons();
   };
   
-  // ============ إضافة سؤال ============
-  window.addQuestionField = function() {
-    const area = document.getElementById('questionsArea');
-    const idx = questionCount++;
+  window.switchModel = function(model) {
+    document.getElementById('tabA').classList.remove('active');
+    document.getElementById('tabB').classList.remove('active');
+    document.getElementById(model === 'A' ? 'tabA' : 'tabB').classList.add('active');
+    document.getElementById('modelA-wrapper').style.display = model === 'A' ? 'block' : 'none';
+    document.getElementById('modelB-wrapper').style.display = model === 'B' ? 'block' : 'none';
+  };
+  
+  window.addQuestion = function(model) {
+    const areaId = model === 'A' ? 'modelA-questions' : 'modelB-questions';
+    const area = document.getElementById(areaId);
+    const idx = model === 'A' ? questionCountA++ : questionCountB++;
+    const prefix = model === 'A' ? 'A' : 'B';
     const html = `
-      <div class="question-card" id="q${idx}">
+      <div class="question-card" id="q${prefix}${idx}">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-          <strong style="color:#7c3aed;">سؤال ${idx + 1}</strong>
-          <button class="del-btn" onclick="document.getElementById('q${idx}').remove()" style="padding:5px 10px;">✕</button>
+          <strong style="color:#7c3aed;">سؤال ${idx + 1} - نموذج ${model}</strong>
+          <button class="del-btn" onclick="document.getElementById('q${prefix}${idx}').remove()" style="padding:5px 10px;">✕</button>
         </div>
-        
         <div class="field">
           <label>نص السؤال</label>
-          <textarea class="q-text" placeholder="اكتب السؤال هنا"></textarea>
+          <textarea class="q-text" placeholder="اكتب السؤال"></textarea>
         </div>
-        
         <div class="field">
           <label>الإجابة النموذجية</label>
-          <textarea class="q-answer" placeholder="اللي الطالب هيشوفه بعد التصحيح"></textarea>
+          <textarea class="q-answer" placeholder="اللي الطالب هيشوفه"></textarea>
         </div>
-        
         <div class="field">
           <label>الكلمات المفتاحية</label>
           <input type="text" class="q-keywords" placeholder="مثال: ساكن, سرعة, قوة">
         </div>
-        
         <div class="field" style="margin-bottom:0;">
           <label>الدرجة</label>
           <input type="number" class="q-points" value="1" min="1">
@@ -566,84 +438,57 @@
   window.saveExam = async function() {
     const title = document.getElementById('examTitle').value.trim();
     const grade = document.getElementById('examGrade').value;
-    const duration = document.getElementById('examDuration').value.trim() || '—';
+    const duration = parseInt(document.getElementById('examDuration').value) || 40;
     const msg = document.getElementById('examMsg');
     const btn = document.getElementById('saveExamBtn');
     
-    if (!title) {
-      msg.textContent = '⚠️ اكتب عنوان الامتحان';
-      msg.className = 'msg error';
-      return;
+    if (!title) { msg.textContent = '⚠️ اكتب عنوان الامتحان'; msg.className = 'msg error'; return; }
+    
+    function collectQuestions(wrapperId) {
+      const questions = [];
+      document.querySelectorAll('#' + wrapperId + ' .question-card').forEach(qEl => {
+        const text = qEl.querySelector('.q-text').value.trim();
+        const answer = qEl.querySelector('.q-answer').value.trim();
+        const keywordsRaw = qEl.querySelector('.q-keywords').value.trim();
+        const points = parseInt(qEl.querySelector('.q-points').value) || 1;
+        if (text && answer) {
+          const keywords = keywordsRaw.split(/[,،]/).map(k => k.trim()).filter(Boolean);
+          questions.push({ text, answer, keywords, points });
+        }
+      });
+      return questions;
     }
     
-    const questions = [];
-    document.querySelectorAll('#questionsArea .question-card').forEach(qEl => {
-      const text = qEl.querySelector('.q-text').value.trim();
-      const answer = qEl.querySelector('.q-answer').value.trim();
-      const keywordsRaw = qEl.querySelector('.q-keywords').value.trim();
-      const points = parseInt(qEl.querySelector('.q-points').value) || 1;
-      
-      if (text && answer) {
-        const keywords = keywordsRaw
-          .split(/[,،]/)
-          .map(k => k.trim())
-          .filter(Boolean);
-        
-        questions.push({ text, answer, keywords, points });
-      }
-    });
+    const questionsA = collectQuestions('modelA-questions');
+    const questionsB = collectQuestions('modelB-questions');
     
-    if (questions.length === 0) {
-      msg.textContent = '⚠️ أضف سؤال واحد على الأقل';
+    if (questionsA.length === 0) { msg.textContent = '⚠️ أضف أسئلة لنموذج A'; msg.className = 'msg error'; return; }
+    if (questionsB.length === 0) { msg.textContent = '⚠️ أضف أسئلة لنموذج B'; msg.className = 'msg error'; return; }
+    if (questionsA.length !== questionsB.length) {
+      msg.textContent = `⚠️ لازم النموذجين بنفس عدد الأسئلة (A=${questionsA.length} , B=${questionsB.length})`;
       msg.className = 'msg error';
       return;
     }
     
     btn.disabled = true;
-    document.getElementById('examProgressBar').classList.add('active');
-    document.getElementById('examProgressFill').style.width = '0%';
+    btn.textContent = '⏳ جاري الحفظ...';
     
     try {
-      let imageData = null;
-      
-      if (selectedExamFile) {
-        btn.textContent = '⏳ جاري رفع الصورة...';
-        imageData = await uploadToCloudinary(
-          selectedExamFile, 'twin_exams',
-          document.getElementById('examProgressFill'),
-          document.getElementById('examProgressBar'),
-          msg
-        );
-      }
-      
-      btn.textContent = '💾 جاري الحفظ...';
-      msg.textContent = '💾 جاري حفظ الامتحان...';
-      msg.className = 'msg info';
-      
       await addDoc(collection(db, 'exams'), {
-        title, grade, duration, questions,
-        imageUrl: imageData ? imageData.url : null,
-        imageType: imageData ? imageData.type : null,
-        totalPoints: questions.reduce((s, q) => s + q.points, 0),
+        title, grade, duration,
+        modelA: { questions: questionsA, totalPoints: questionsA.reduce((s,q) => s+q.points, 0) },
+        modelB: { questions: questionsB, totalPoints: questionsB.reduce((s,q) => s+q.points, 0) },
         createdAt: new Date().toISOString()
       });
-      
       msg.textContent = '✅ تم حفظ الامتحان بنجاح';
       msg.className = 'msg success';
-      
       document.getElementById('examTitle').value = '';
-      document.getElementById('examDuration').value = '';
-      document.getElementById('examImageFile').value = '';
-      document.getElementById('examFileName').textContent = '';
-      document.getElementById('questionsArea').innerHTML = '';
-      document.getElementById('examProgressBar').classList.remove('active');
-      selectedExamFile = null;
-      questionCount = 0;
-      
+      document.getElementById('modelA-questions').innerHTML = '';
+      document.getElementById('modelB-questions').innerHTML = '';
+      questionCountA = 0;
+      questionCountB = 0;
       loadExams();
-      
     } catch (err) {
-      console.error(err);
       msg.textContent = '❌ ' + err.message;
       msg.className = 'msg error';
     } finally {
@@ -657,29 +502,16 @@
     list.innerHTML = '<div class="empty">جاري التحميل...</div>';
     try {
       const snap = await getDocs(collection(db, 'exams'));
-      if (snap.empty) {
-        list.innerHTML = '<div class="empty">لا توجد امتحانات بعد 📭</div>';
-        return;
-      }
+      if (snap.empty) { list.innerHTML = '<div class="empty">لا توجد امتحانات بعد 📭</div>'; return; }
       let html = '';
       snap.forEach(d => {
         const e = d.data();
-        const qCount = e.questions ? e.questions.length : 0;
-        const total = e.totalPoints || 0;
-        html += `
-          <div class="item">
-            <div class="item-info">
-              <div class="item-title">${e.title}</div>
-              <div class="item-meta">${qCount} سؤال • ${total} درجة • ${e.duration}</div>
-            </div>
-            <button class="del-btn" onclick="deleteExam('${d.id}')">🗑️</button>
-          </div>
-        `;
+        const countA = e.modelA?.questions?.length || 0;
+        const countB = e.modelB?.questions?.length || 0;
+        html += `<div class="item"><div class="item-info"><div class="item-title">${e.title}</div><div class="item-meta">⏱️ ${e.duration} دقيقة • 📘 A: ${countA} • 📗 B: ${countB}</div></div><button class="del-btn" onclick="deleteExam('${d.id}')">🗑️</button></div>`;
       });
       list.innerHTML = html;
-    } catch (err) {
-      list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>';
-    }
+    } catch (err) { list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>'; }
   }
   
   window.deleteExam = async function(id) {
@@ -688,65 +520,278 @@
     loadExams();
   };
   
-  // ============ الإعدادات ============
+  window.selectRatingType = function(type) {
+    selectedRatingType = type;
+    document.getElementById('btnDaily').classList.remove('active');
+    document.getElementById('btnWeekly').classList.remove('active');
+    if (type === 'daily') document.getElementById('btnDaily').classList.add('active');
+    else document.getElementById('btnWeekly').classList.add('active');
+  };
+  
+  async function loadStudentsDropdown() {
+    const select = document.getElementById('ratingStudent');
+    select.innerHTML = '<option value="">جاري التحميل...</option>';
+    try {
+      const snap = await getDocs(collection(db, 'students'));
+      allStudentsData = [];
+      snap.forEach(d => allStudentsData.push({ id: d.id, ...d.data() }));
+      if (allStudentsData.length === 0) { select.innerHTML = '<option value="">لا يوجد طلاب</option>'; return; }
+      let html = '<option value="">اختار الطالب</option>';
+      allStudentsData.forEach(s => { html += `<option value="${s.id}">${s.studentName || 'بدون اسم'} - ${gradeLabel(s.grade)}</option>`; });
+      select.innerHTML = html;
+    } catch (err) { select.innerHTML = '<option value="">خطأ</option>'; }
+  }
+  
+  window.saveRating = async function() {
+    const studentId = document.getElementById('ratingStudent').value;
+    const score = parseInt(document.getElementById('ratingScore').value);
+    const note = document.getElementById('ratingNote').value.trim();
+    const msg = document.getElementById('ratingMsg');
+    const btn = document.getElementById('saveRatingBtn');
+    if (!studentId) { msg.textContent = '⚠️ اختار الطالب'; msg.className = 'msg error'; return; }
+    if (isNaN(score) || score < 0 || score > 10) { msg.textContent = '⚠️ الدرجة من 0 لـ 10'; msg.className = 'msg error'; return; }
+    btn.disabled = true; btn.textContent = '⏳...';
+    try {
+      await addDoc(collection(db, 'ratings'), { studentId, type: selectedRatingType, score, note, date: new Date().toISOString() });
+      msg.textContent = '✅ تم حفظ التقييم';
+      msg.className = 'msg success';
+      document.getElementById('ratingScore').value = '';
+      document.getElementById('ratingNote').value = '';
+      loadRatingsList();
+    } catch (err) {
+      msg.textContent = '❌ ' + err.message;
+      msg.className = 'msg error';
+    } finally { btn.disabled = false; btn.textContent = '💾 حفظ التقييم'; }
+  };
+  
+  async function loadRatingsList() {
+    const list = document.getElementById('ratingsList');
+    list.innerHTML = '<div class="empty">جاري التحميل...</div>';
+    try {
+      const snap = await getDocs(collection(db, 'ratings'));
+      const ratings = [];
+      snap.forEach(d => ratings.push({ id: d.id, ...d.data() }));
+      ratings.sort((a, b) => new Date(b.date) - new Date(a.date));
+      if (ratings.length === 0) { list.innerHTML = '<div class="empty">لا توجد تقييمات بعد 📭</div>'; return; }
+      let html = '';
+      ratings.slice(0, 20).forEach(r => {
+        const student = allStudentsData.find(s => s.id === r.studentId);
+        const studentName = student ? student.studentName : 'طالب محذوف';
+        const typeLabel = r.type === 'daily' ? '📖 تسميع يومي' : '⭐ تقييم أسبوعي';
+        const color = r.score >= 7 ? '#22c55e' : r.score >= 5 ? '#f59e0b' : '#ef4444';
+        html += `<div class="item" style="border-right-color:${color};"><div class="item-info"><div class="item-title">${studentName}</div><div class="item-meta">${typeLabel} • ${new Date(r.date).toLocaleDateString('ar-EG')}</div>${r.note ? `<div class="item-meta" style="color:#7c3aed; margin-top:4px;">📝 ${r.note}</div>` : ''}</div><div style="background:${color}; color:#fff; padding:8px 12px; border-radius:10px; font-weight:bold; font-size:14px;">${r.score}/10</div><button class="del-btn" onclick="deleteRating('${r.id}')" style="padding:6px 10px;">🗑️</button></div>`;
+      });
+      list.innerHTML = html;
+    } catch (err) { list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>'; }
+  }
+  
+  window.deleteRating = async function(id) {
+    if (!confirm('متأكد من حذف التقييم؟')) return;
+    await deleteDoc(doc(db, 'ratings', id));
+    loadRatingsList();
+  };
+  
+  function gradeLabel(g) {
+    const map = { sec2: 'تانية بكالوريا', sec3: 'تالتة ثانوي' };
+    return map[g] || g;
+  }
+  
+  async function loadStudents() {
+    const list = document.getElementById('studentsList');
+    list.innerHTML = '<div class="empty">جاري التحميل...</div>';
+    try {
+      const snap = await getDocs(collection(db, 'students'));
+      allStudentsData = [];
+      snap.forEach(d => allStudentsData.push({ id: d.id, ...d.data() }));
+      if (allStudentsData.length === 0) { list.innerHTML = '<div class="empty">لا يوجد طلاب مسجلين بعد 📭</div>'; return; }
+      let html = '';
+      allStudentsData.forEach(s => {
+        const resultsCount = s.results ? Object.keys(s.results).length : 0;
+        const watchedCount = s.watchedLessons ? Object.keys(s.watchedLessons).length : 0;
+        const safeName = (s.studentName || 'طالب').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        html += `
+          <div class="item" style="border-right-color:#3b82f6;">
+            <div class="item-info" onclick="openStudentReport('${s.id}')" style="cursor:pointer;">
+              <div class="item-title">${s.studentName || 'بدون اسم'}</div>
+              <div class="item-meta">📱 ${s.studentId} • ${gradeLabel(s.grade)}</div>
+              <div class="item-meta" style="color:#7c3aed; margin-top:3px;">📚 شاف ${watchedCount} درس • 📝 ${resultsCount} امتحان</div>
+            </div>
+            <div style="display:flex; gap:5px; align-items:center;">
+              <span onclick="openStudentReport('${s.id}')" style="color:#7c3aed; font-size:22px; cursor:pointer; padding:0 3px;">›</span>
+              <button class="del-btn" onclick="deleteStudent('${s.id}', '${safeName}')" style="padding:8px 10px;">🗑️</button>
+            </div>
+          </div>
+        `;
+      });
+      list.innerHTML = html;
+    } catch (err) { list.innerHTML = '<div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div>'; }
+  }
+  
+  window.deleteStudent = async function(studentId, studentName) {
+    if (!confirm(`⚠️ متأكد من حذف الطالب "${studentName}"؟\n\nهيمسح: البيانات + النتائج + التقييمات`)) return;
+    try {
+      await deleteDoc(doc(db, 'students', studentId));
+      const ratingsSnap = await getDocs(collection(db, 'ratings'));
+      const deletes = [];
+      ratingsSnap.forEach(d => { if (d.data().studentId === studentId) deletes.push(deleteDoc(doc(db, 'ratings', d.id))); });
+      await Promise.all(deletes);
+      alert('✅ تم حذف الطالب');
+      loadStudents();
+    } catch (err) { alert('❌ خطأ: ' + err.message); }
+  };
+  
+  window.openStudentReport = async function(studentId) {
+    const student = allStudentsData.find(s => s.id === studentId);
+    if (!student) return;
+    const resultsTab = document.getElementById('resultsTab');
+    resultsTab.innerHTML = '<div class="card"><div class="empty">جاري تحميل التقرير...</div></div>';
+    try {
+      const ratingsSnap = await getDocs(collection(db, 'ratings'));
+      const allRatings = [];
+      ratingsSnap.forEach(d => { const r = d.data(); if (r.studentId === studentId) allRatings.push(r); });
+      const results = student.results || {};
+      const resultKeys = Object.keys(results);
+      const watched = student.watchedLessons || {};
+      const watchedKeys = Object.keys(watched);
+      const now = new Date();
+      const oneDayAgo = new Date(now.getTime() - 24*60*60*1000);
+      const oneWeekAgo = new Date(now.getTime() - 7*24*60*60*1000);
+      const dailyRatings = allRatings.filter(r => r.type === 'daily' && new Date(r.date) >= oneDayAgo);
+      const weeklyRatings = allRatings.filter(r => r.type === 'weekly' && new Date(r.date) >= oneWeekAgo);
+      
+      let html = `
+        <div class="card">
+          <button onclick="loadStudents()" style="background:#e2e8f0; color:#475569; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; font-family:inherit; font-size:13px; margin-bottom:15px;">← رجوع</button>
+          <div style="background:linear-gradient(135deg,#7c3aed,#a855f7); color:#fff; padding:18px; border-radius:14px; text-align:center; margin-bottom:15px;">
+            <div style="font-size:44px; margin-bottom:8px;">👤</div>
+            <h2 style="margin-bottom:5px; font-size:18px;">${student.studentName || 'بدون اسم'}</h2>
+            <p style="font-size:13px; opacity:0.9;">${gradeLabel(student.grade)}</p>
+            <p style="font-size:12px; opacity:0.85; margin-top:5px;">📱 ${student.studentId} • 👨‍👩‍👦 ${student.parentPhone || '—'}</p>
+          </div>
+          
+          <div style="background:#e0e7ff; border-radius:14px; padding:15px; margin-bottom:12px; border-right:4px solid #6366f1;">
+            <div style="font-weight:bold; color:#3730a3; font-size:15px; margin-bottom:10px;">📚 الدروس اللي شافها (${watchedKeys.length})</div>
+            ${watchedKeys.length === 0 ? '<p style="color:#94a3b8; font-size:13px;">لم يشاهد أي درس</p>' : watchedKeys.map(k => `<div style="background:#fff; padding:8px 10px; border-radius:8px; margin-bottom:5px; font-size:13px;"><span style="color:#166534;">✅ ${watched[k].title}</span> <span style="color:#94a3b8; font-size:11px;">- ${new Date(watched[k].watchedAt).toLocaleDateString('ar-EG')}</span></div>`).join('')}
+          </div>
+          
+          <div style="background:#eff6ff; border-radius:14px; padding:15px; margin-bottom:12px; border-right:4px solid #3b82f6;">
+            <div style="font-weight:bold; color:#1e3a8a; font-size:15px; margin-bottom:10px;">📖 التسميع اليومي (آخر 24 ساعة)</div>
+            ${dailyRatings.length === 0 ? '<p style="color:#94a3b8; font-size:13px;">لا يوجد تسميع اليوم</p>' : dailyRatings.map(r => `<div style="background:#fff; padding:10px; border-radius:8px; margin-bottom:6px;"><div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:13px; color:#334155;">${new Date(r.date).toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'})}</span><span style="background:#3b82f6; color:#fff; padding:4px 10px; border-radius:8px; font-weight:bold; font-size:13px;">${r.score}/10</span></div>${r.note ? `<div style="font-size:12px; color:#7c3aed; margin-top:4px;">📝 ${r.note}</div>` : ''}</div>`).join('')}
+          </div>
+          
+          <div style="background:#fef3c7; border-radius:14px; padding:15px; border-right:4px solid #f59e0b;">
+            <div style="font-weight:bold; color:#92400e; font-size:15px; margin-bottom:10px;">⭐ التقييم الأسبوعي (آخر 7 أيام)</div>
+            ${weeklyRatings.length === 0 ? '<p style="color:#94a3b8; font-size:13px;">لا يوجد تقييم هذا الأسبوع</p>' : weeklyRatings.map(r => `<div style="background:#fff; padding:10px; border-radius:8px; margin-bottom:6px;"><div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-size:13px; color:#334155;">${new Date(r.date).toLocaleDateString('ar-EG')}</span><span style="background:#f59e0b; color:#fff; padding:4px 10px; border-radius:8px; font-weight:bold; font-size:13px;">${r.score}/10</span></div>${r.note ? `<div style="font-size:12px; color:#7c3aed; margin-top:4px;">📝 ${r.note}</div>` : ''}</div>`).join('')}
+          </div>
+        </div>
+      `;
+      
+      let examsHtml = `<div class="card"><div style="background:#dcfce7; border-radius:14px; padding:15px; border-right:4px solid #22c55e;"><div style="font-weight:bold; color:#166534; font-size:15px; margin-bottom:10px;">📝 نتائج الامتحانات (${resultKeys.length})</div>`;
+      if (resultKeys.length === 0) {
+        examsHtml += '<p style="color:#94a3b8; font-size:13px;">لا يوجد امتحانات محلولة</p>';
+      } else {
+        resultKeys.forEach(k => {
+          const r = results[k];
+          const color = r.percent >= 50 ? '#22c55e' : '#ef4444';
+          const modelLabel = r.model === 'A' ? '📘 A' : r.model === 'B' ? '📗 B' : '';
+          const statusLabel = r.status === 'abandoned' ? ' <span style="color:#ef4444;">(لم يُكمل)</span>' : '';
+          examsHtml += `<div style="background:#fff; padding:10px; border-radius:8px; margin-bottom:6px;"><div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:5px;"><span style="font-size:13px; color:#334155; font-weight:bold;">${r.examTitle}${statusLabel}</span><div style="display:flex; gap:5px;"><span style="background:#e9d5ff; color:#6b21a8; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:bold;">${modelLabel}</span><span style="background:${color}; color:#fff; padding:4px 10px; border-radius:8px; font-weight:bold; font-size:13px;">${r.percent}%</span></div></div><div style="font-size:12px; color:#64748b; margin-top:4px;">الدرجة: ${r.score} / ${r.total}</div></div>`;
+        });
+      }
+      examsHtml += `</div></div>`;
+      
+      const dailyAvg = dailyRatings.length > 0 ? Math.round(dailyRatings.reduce((s,r) => s + r.score, 0) / dailyRatings.length * 10) : 0;
+      const weeklyAvg = weeklyRatings.length > 0 ? Math.round(weeklyRatings.reduce((s,r) => s + r.score, 0) / weeklyRatings.length * 10) : 0;
+      let totalScore = 0, totalMax = 0;
+      resultKeys.forEach(k => { totalScore += results[k].score || 0; totalMax += results[k].total || 0; });
+      const examAvg = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+      
+      const parentPhone = (student.parentPhone || '').replace(/\D/g, '').replace(/^0/, '20');
+      const reportText = buildReportText(student, results, dailyRatings, weeklyRatings, watched, dailyAvg, weeklyAvg, examAvg);
+      const waLink = `https://wa.me/${parentPhone}?text=${encodeURIComponent(reportText)}`;
+      
+      html += examsHtml;
+      html += `
+        <div class="card">
+          <div style="background:#f3e8ff; border-radius:14px; padding:15px; margin-bottom:15px;">
+            <div style="font-weight:bold; color:#6b21a8; font-size:15px; margin-bottom:10px;">📊 ملخص سريع</div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <span style="background:#dbeafe; color:#1e40af; padding:8px 12px; border-radius:10px; font-weight:bold; font-size:13px;">📖 يومي: ${dailyAvg}%</span>
+              <span style="background:#fef3c7; color:#92400e; padding:8px 12px; border-radius:10px; font-weight:bold; font-size:13px;">⭐ أسبوعي: ${weeklyAvg}%</span>
+              <span style="background:#dcfce7; color:#166534; padding:8px 12px; border-radius:10px; font-weight:bold; font-size:13px;">📝 امتحانات: ${examAvg}%</span>
+            </div>
+          </div>
+          <a href="${waLink}" target="_blank" style="display:block; text-align:center; background:linear-gradient(135deg,#16a34a,#22c55e); color:#fff; padding:16px; border-radius:12px; text-decoration:none; font-weight:bold; font-size:15px;">
+            📤 إرسال التقرير لولي الأمر على واتساب
+          </a>
+        </div>
+      `;
+      resultsTab.innerHTML = html;
+      window.scrollTo(0, 0);
+    } catch (err) {
+      resultsTab.innerHTML = '<div class="card"><div class="empty" style="color:#ef4444;">خطأ: ' + err.message + '</div></div>';
+    }
+  };
+  
+  function buildReportText(student, results, dailyRatings, weeklyRatings, watched, dailyAvg, weeklyAvg, examAvg) {
+    let text = `📊 *تقرير منصة Twins*\n\n`;
+    text += `👤 الطالب: ${student.studentName}\n`;
+    text += `🎓 المرحلة: ${gradeLabel(student.grade)}\n`;
+    text += `📅 التاريخ: ${new Date().toLocaleDateString('ar-EG')}\n\n`;
+    text += `━━━━━━━━━━━━━━━\n\n`;
+    text += `📚 *الدروس المشاهدة:* ${Object.keys(watched).length}\n\n`;
+    text += `━━━━━━━━━━━━━━━\n\n`;
+    text += `📖 *التسميع اليومي:*\n`;
+    if (dailyRatings.length === 0) text += `لا يوجد تسميع اليوم\n`;
+    else dailyRatings.forEach(r => { text += `▪️ ${r.score}/10 ${r.note ? `- ${r.note}` : ''}\n`; });
+    text += `*المتوسط: ${dailyAvg}%*\n\n━━━━━━━━━━━━━━━\n\n`;
+    text += `⭐ *التقييم الأسبوعي:*\n`;
+    if (weeklyRatings.length === 0) text += `لا يوجد تقييم هذا الأسبوع\n`;
+    else weeklyRatings.forEach(r => { text += `▪️ ${r.score}/10 ${r.note ? `- ${r.note}` : ''}\n`; });
+    text += `*المتوسط: ${weeklyAvg}%*\n\n━━━━━━━━━━━━━━━\n\n`;
+    text += `📝 *نتائج الامتحانات:*\n`;
+    const keys = Object.keys(results);
+    if (keys.length === 0) text += `لا يوجد امتحانات محلولة\n`;
+    else keys.forEach(k => {
+      const r = results[k];
+      const modelLabel = r.model ? ` [نموذج ${r.model}]` : '';
+      text += `▪️ ${r.examTitle}${modelLabel}\n   الدرجة: ${r.score} / ${r.total} (${r.percent}%)\n`;
+    });
+    text += `*المتوسط: ${examAvg}%*\n\n━━━━━━━━━━━━━━━\n\n`;
+    const overallAvg = Math.round((dailyAvg + weeklyAvg + examAvg) / 3);
+    text += `🎯 *التقييم العام: ${overallAvg}%*\n\n`;
+    if (overallAvg >= 80) text += `🌟 ممتاز!`;
+    else if (overallAvg >= 60) text += `👍 جيد`;
+    else if (overallAvg >= 50) text += `📚 يحتاج مذاكرة`;
+    else text += `⚠️ يحتاج متابعة`;
+    text += `\n\n━━━━━━━━━━━━━━━\n_منصة Twins التعليمية_`;
+    return text;
+  }
+  
   async function loadSettings() {
     const input = document.getElementById('supportPhone');
     const msg = document.getElementById('settingsMsg');
-    msg.className = 'msg';
-    msg.style.display = 'none';
-    
+    msg.className = 'msg'; msg.style.display = 'none';
     try {
       const snap = await getDoc(doc(db, 'settings', 'support'));
-      if (snap.exists()) {
-        input.value = snap.data().whatsapp || '';
-      } else {
-        input.value = '';
-      }
-    } catch (err) {
-      console.error('خطأ في تحميل الإعدادات:', err);
-    }
+      input.value = snap.exists() ? (snap.data().whatsapp || '') : '';
+    } catch (err) {}
   }
   
   window.saveSettings = async function() {
     const phone = document.getElementById('supportPhone').value.trim();
     const msg = document.getElementById('settingsMsg');
     const btn = document.getElementById('saveSettingsBtn');
-    
-    if (!phone) {
-      msg.textContent = '⚠️ اكتب رقم الواتساب الأول';
-      msg.className = 'msg error';
-      return;
-    }
-    
-    // تحقق من الصيغة
-    if (!/^\d{10,15}$/.test(phone)) {
-      msg.textContent = '⚠️ الرقم لازم يكون أرقام بس (10-15 رقم)';
-      msg.className = 'msg error';
-      return;
-    }
-    
-    btn.disabled = true;
-    btn.textContent = '⏳ جاري الحفظ...';
-    
+    if (!phone) { msg.textContent = '⚠️ اكتب الرقم'; msg.className = 'msg error'; return; }
+    if (!/^\d{10,15}$/.test(phone)) { msg.textContent = '⚠️ الرقم لازم أرقام بس (10-15)'; msg.className = 'msg error'; return; }
+    btn.disabled = true; btn.textContent = '⏳...';
     try {
-      await setDoc(doc(db, 'settings', 'support'), {
-        whatsapp: phone,
-        updatedAt: new Date().toISOString()
-      });
-      
-      msg.textContent = '✅ تم حفظ الإعدادات بنجاح';
+      await setDoc(doc(db, 'settings', 'support'), { whatsapp: phone, updatedAt: new Date().toISOString() });
+      msg.textContent = '✅ تم الحفظ';
       msg.className = 'msg success';
-      
-    } catch (err) {
-      console.error(err);
-      msg.textContent = '❌ ' + err.message;
-      msg.className = 'msg error';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '💾 حفظ الإعدادات';
-    }
+    } catch (err) { msg.textContent = '❌ ' + err.message; msg.className = 'msg error'; }
+    finally { btn.disabled = false; btn.textContent = '💾 حفظ الإعدادات'; }
   };
 </script>
-
 </body>
 </html>
